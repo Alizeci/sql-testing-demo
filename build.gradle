@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'escuelaing.edu.co'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    annotationProcessor
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    // CPT-SQL framework — published to Maven local via `./gradlew publishToMavenLocal` in CPT-SQL repo
+    compileOnly         'escuelaing.edu.co:sql-testing-annotations:0.0.1-SNAPSHOT'
+    annotationProcessor 'escuelaing.edu.co:sql-testing-annotations:0.0.1-SNAPSHOT'
+    implementation      'escuelaing.edu.co:sql-testing-domain:0.0.1-SNAPSHOT'
+    implementation      'escuelaing.edu.co:sql-testing-infrastructure:0.0.1-SNAPSHOT'
+
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    // PostgreSQL driver
+    implementation 'org.postgresql:postgresql:42.7.3'
+
+    // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    // Lombok
+    compileOnly         'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly    'org.junit.platform:junit-platform-launcher:1.10.2'
+    testImplementation 'org.assertj:assertj-core:3.25.3'
+}
+
+tasks.named('compileJava') {
+    options.annotationProcessorPath = configurations.annotationProcessor
+}
+
+// Runs the traffic simulator (Phase 2)
+tasks.register('runSimulator', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'escuelaing.edu.co.demo.EcommerceSimulator'
+    workingDir = projectDir
+}
