@@ -1,0 +1,14 @@
+name: Nightly Benchmark — Volume degradation detection
+
+on:
+  schedule:
+    - cron: '0 7 * * *'   # 2:00 AM COT (UTC-5)
+  workflow_dispatch:
+
+jobs:
+  nightly:
+    uses: Alizeci/CPT-SQL/.github/workflows/nightly-benchmark.yml@main
+    with:
+      schema-script: src/main/resources/schema-ecommerce.sql
+      jar-path: build/libs/sql-testing-demo.jar
+      rows-per-table: 200000

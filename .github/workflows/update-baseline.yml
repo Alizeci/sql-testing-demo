@@ -1,0 +1,17 @@
+name: Baseline — Update post-merge
+
+on:
+  push:
+    branches: [main, develop, qa]
+    paths-ignore:
+      - 'baseline.json'
+      - 'load-profile.json'
+
+jobs:
+  update-baseline:
+    uses: Alizeci/CPT-SQL/.github/workflows/update-baseline.yml@main
+    with:
+      schema-script: src/main/resources/schema-ecommerce.sql
+      jar-path: build/libs/sql-testing-demo.jar
+      rows-per-table: 10000
+      test-profile: light

@@ -1,0 +1,23 @@
+name: Capture — Production load profile
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      simulation-secs:
+        description: 'Simulation duration in seconds (default: 120)'
+        required: false
+        default: '120'
+
+jobs:
+  capture-profile:
+    uses: Alizeci/CPT-SQL/.github/workflows/capture-production-profile.yml@main
+    with:
+      simulation-secs: ${{ fromJson(inputs.simulation-secs || '120') }}
+    secrets:
+      DB_URL: ${{ secrets.DEMO_DB_URL }}
+      DB_USER: ${{ secrets.DEMO_DB_USER }}
+      DB_PASSWORD: ${{ secrets.DEMO_DB_PASSWORD }}
