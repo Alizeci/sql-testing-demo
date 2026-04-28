@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  benchmark:
+  call-cpt-light-benchmark:
     uses: Alizeci/CPT-SQL/.github/workflows/light-benchmark.yml@main
     with:
       schema-script: src/main/resources/schema-ecommerce.sql
