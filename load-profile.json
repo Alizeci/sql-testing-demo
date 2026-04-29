@@ -1,31 +1,31 @@
 {
-  "generatedAt" : "2026-04-29T21:26:45.706748650Z",
-  "totalSamples" : 923,
+  "generatedAt" : "2026-04-29T22:51:39.675457478Z",
+  "totalSamples" : 976,
   "queries" : {
     "createOrder" : {
       "queryId" : "createOrder",
-      "sampleCount" : 30,
-      "meanMs" : 4.1,
+      "sampleCount" : 31,
+      "meanMs" : 3.6129032258064515,
       "medianMs" : 3.0,
-      "p95Ms" : 9.0,
-      "p99Ms" : 11.0,
+      "p95Ms" : 7.0,
+      "p99Ms" : 7.0,
       "minMs" : 2,
-      "maxMs" : 11,
-      "callsPerMinute" : 15.005752205011921,
+      "maxMs" : 7,
+      "callsPerMinute" : 15.512668679421528,
       "capturedSql" : "INSERT INTO orders(customer_id, status, total_amount) VALUES (?, 'PENDING', 0) RETURNING id",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : null
     },
     "searchProductsByCategory" : {
       "queryId" : "searchProductsByCategory",
-      "sampleCount" : 370,
-      "meanMs" : 7.275675675675676,
+      "sampleCount" : 409,
+      "meanMs" : 7.45476772616137,
       "medianMs" : 7.0,
-      "p95Ms" : 11.0,
+      "p95Ms" : 14.0,
       "p99Ms" : 16.0,
       "minMs" : 4,
-      "maxMs" : 29,
-      "callsPerMinute" : 185.07094386181367,
+      "maxMs" : 17,
+      "callsPerMinute" : 204.66714483494854,
       "capturedSql" : "SELECT id, name, price, stock_quantity, rating FROM products WHERE active = true AND category = ? ORDER BY rating DESC LIMIT 20 OFFSET 0",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : [ {
@@ -176,61 +176,71 @@
         "price" : 418.84,
         "rating" : 5.00,
         "stock_quantity" : 417
+      }, {
+        "price" : 418.84,
+        "rating" : 5.00,
+        "stock_quantity" : 417
+      }, {
+        "price" : 137.15,
+        "rating" : 5.00,
+        "stock_quantity" : 30
+      }, {
+        "price" : 77.21,
+        "rating" : 5.00,
+        "stock_quantity" : 297
+      }, {
+        "price" : 349.18,
+        "rating" : 5.00,
+        "stock_quantity" : 282
       } ]
     },
     "salesDashboard" : {
       "queryId" : "salesDashboard",
-      "sampleCount" : 40,
-      "meanMs" : 1966.55,
-      "medianMs" : 2010.0,
-      "p95Ms" : 2106.0,
-      "p99Ms" : 2364.0,
-      "minMs" : 1369,
-      "maxMs" : 2364,
-      "callsPerMinute" : 20.007669606682562,
+      "sampleCount" : 3,
+      "meanMs" : 1615.3333333333333,
+      "medianMs" : 1441.0,
+      "p95Ms" : 2041.0,
+      "p99Ms" : 2041.0,
+      "minMs" : 1364,
+      "maxMs" : 2041,
+      "callsPerMinute" : 1.5012260012343415,
       "capturedSql" : "SELECT p.category,        COUNT(DISTINCT o.id)             AS total_orders,        SUM(oi.quantity * oi.unit_price) AS total_revenue,        AVG(oi.unit_price)               AS avg_price FROM products p JOIN order_items oi ON oi.product_id = p.id JOIN orders o       ON o.id = oi.order_id WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') GROUP BY p.category ORDER BY total_revenue DESC",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : [ {
-        "category" : "home"
-      }, {
-        "category" : "home"
-      }, {
-        "category" : "home"
-      }, {
         "category" : "home"
       } ]
     },
     "updateInventory" : {
       "queryId" : "updateInventory",
-      "sampleCount" : 30,
-      "meanMs" : 3.3666666666666667,
+      "sampleCount" : 31,
+      "meanMs" : 2.7419354838709675,
       "medianMs" : 3.0,
-      "p95Ms" : 7.0,
-      "p99Ms" : 8.0,
-      "minMs" : 2,
-      "maxMs" : 8,
-      "callsPerMinute" : 15.005752205011921,
+      "p95Ms" : 6.0,
+      "p99Ms" : 6.0,
+      "minMs" : 1,
+      "maxMs" : 6,
+      "callsPerMinute" : 15.512668679421528,
       "capturedSql" : "UPDATE products SET stock_quantity = stock_quantity + ? WHERE id = ? AND stock_quantity + ? >= 0",
       "avgRowCount" : 1.0,
       "sanitizedRealData" : null
     },
     "getProductDetail" : {
       "queryId" : "getProductDetail",
-      "sampleCount" : 370,
-      "meanMs" : 0.9,
+      "sampleCount" : 409,
+      "meanMs" : 0.9144254278728606,
       "medianMs" : 1.0,
       "p95Ms" : 2.0,
       "p99Ms" : 3.0,
       "minMs" : 0,
-      "maxMs" : 6,
-      "callsPerMinute" : 185.07094386181367,
+      "maxMs" : 5,
+      "callsPerMinute" : 204.66714483494854,
       "capturedSql" : "SELECT id, name, category, price, stock_quantity, rating, active FROM products WHERE id = ?",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : [ {
         "price" : 147.68,
         "rating" : 1.60,
         "category" : "clothing",
-        "stock_quantity" : 382
+        "stock_quantity" : 381
       }, {
         "price" : 325.12,
         "rating" : 1.91,
@@ -285,7 +295,7 @@
         "price" : 475.04,
         "rating" : 3.85,
         "category" : "home",
-        "stock_quantity" : 463
+        "stock_quantity" : 462
       }, {
         "price" : 15.17,
         "rating" : 3.92,
@@ -310,7 +320,7 @@
         "price" : 115.35,
         "rating" : 1.61,
         "category" : "electronics",
-        "stock_quantity" : 275
+        "stock_quantity" : 274
       }, {
         "price" : 283.70,
         "rating" : 2.01,
@@ -335,7 +345,7 @@
         "price" : 183.58,
         "rating" : 4.87,
         "category" : "sports",
-        "stock_quantity" : 143
+        "stock_quantity" : 142
       }, {
         "price" : 438.44,
         "rating" : 2.66,
@@ -355,17 +365,17 @@
         "price" : 147.68,
         "rating" : 1.60,
         "category" : "clothing",
-        "stock_quantity" : 381
+        "stock_quantity" : 380
       }, {
         "price" : 253.29,
         "rating" : 2.72,
         "category" : "clothing",
-        "stock_quantity" : 15
+        "stock_quantity" : 14
       }, {
         "price" : 368.61,
         "rating" : 3.44,
         "category" : "clothing",
-        "stock_quantity" : 1
+        "stock_quantity" : 0
       }, {
         "price" : 211.23,
         "rating" : 2.95,
@@ -411,18 +421,38 @@
         "rating" : 3.83,
         "category" : "electronics",
         "stock_quantity" : 196
+      }, {
+        "price" : 286.40,
+        "rating" : 3.28,
+        "category" : "books",
+        "stock_quantity" : 492
+      }, {
+        "price" : 256.53,
+        "rating" : 4.37,
+        "category" : "electronics",
+        "stock_quantity" : 221
+      }, {
+        "price" : 211.03,
+        "rating" : 2.11,
+        "category" : "books",
+        "stock_quantity" : 399
+      }, {
+        "price" : 175.30,
+        "rating" : 4.26,
+        "category" : "books",
+        "stock_quantity" : 244
       } ]
     },
     "checkInventory" : {
       "queryId" : "checkInventory",
-      "sampleCount" : 83,
-      "meanMs" : 0.6987951807228916,
+      "sampleCount" : 93,
+      "meanMs" : 0.8172043010752689,
       "medianMs" : 1.0,
-      "p95Ms" : 1.0,
+      "p95Ms" : 2.0,
       "p99Ms" : 3.0,
       "minMs" : 0,
       "maxMs" : 3,
-      "callsPerMinute" : 41.515914433866314,
+      "callsPerMinute" : 46.538006038264584,
       "capturedSql" : "SELECT stock_quantity FROM products WHERE id = ?",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : [ {
@@ -434,15 +464,17 @@
       }, {
         "stock_quantity" : 349
       }, {
-        "stock_quantity" : 381
+        "stock_quantity" : 380
       }, {
-        "stock_quantity" : 1
+        "stock_quantity" : 0
       }, {
         "stock_quantity" : 399
       }, {
         "stock_quantity" : 244
       }, {
         "stock_quantity" : 139
+      }, {
+        "stock_quantity" : 154
       } ]
     }
   }
