@@ -82,15 +82,22 @@ public class EcommerceRepository {
         try (CaptureContext ignored = CaptureContext.begin("salesDashboard");
              PreparedStatement ps = conn.prepareStatement(
                      "SELECT p.category, " +
-                     "       COUNT(DISTINCT o.id)             AS total_orders, " +
-                     "       SUM(oi.quantity * oi.unit_price) AS total_revenue, " +
-                     "       AVG(oi.unit_price)               AS avg_price " +
+                     "       COUNT(DISTINCT o.id)                    AS total_orders, " +
+                     "       SUM(oi.quantity * oi.unit_price)        AS total_revenue, " +
+                     "       AVG(oi.unit_price)                      AS avg_price, " +
+                     "       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY oi.unit_price) AS median_price, " +
+                     "       COUNT(DISTINCT CASE WHEN c.tier = 'VIP'     THEN o.customer_id END) AS vip_orders, " +
+                     "       COUNT(DISTINCT CASE WHEN c.tier = 'PREMIUM' THEN o.customer_id END) AS premium_orders, " +
+                     "       ROUND(100.0 * SUM(oi.quantity * oi.unit_price) / " +
+                     "             SUM(SUM(oi.quantity * oi.unit_price)) OVER (), 2) AS pct_of_total, " +
+                     "       RANK() OVER (ORDER BY SUM(oi.quantity * oi.unit_price) DESC) AS revenue_rank " +
                      "FROM products p " +
                      "JOIN order_items oi ON oi.product_id = p.id " +
                      "JOIN orders o       ON o.id = oi.order_id " +
+                     "JOIN customers c    ON c.id = o.customer_id " +
                      "WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') " +
                      "GROUP BY p.category " +
-                     "ORDER BY total_revenue DESC")) {
+                     "ORDER BY revenue_rank")) {
             try (ResultSet rs = ps.executeQuery()) {
                 List<String> categories = new ArrayList<>();
                 while (rs.next()) categories.add(rs.getString("category"));
