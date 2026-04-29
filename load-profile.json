@@ -1,31 +1,31 @@
 {
-  "generatedAt" : "2026-04-29T02:29:30.706612012Z",
-  "totalSamples" : 2591,
+  "generatedAt" : "2026-04-29T05:35:52.779382758Z",
+  "totalSamples" : 2603,
   "queries" : {
     "createOrder" : {
       "queryId" : "createOrder",
       "sampleCount" : 110,
-      "meanMs" : 3.272727272727273,
+      "meanMs" : 3.3454545454545452,
       "medianMs" : 3.0,
-      "p95Ms" : 5.0,
-      "p99Ms" : 5.0,
+      "p95Ms" : 6.0,
+      "p99Ms" : 7.0,
       "minMs" : 2,
-      "maxMs" : 5,
-      "callsPerMinute" : 55.05597357313268,
+      "maxMs" : 8,
+      "callsPerMinute" : 55.05092210294522,
       "capturedSql" : "INSERT INTO orders(customer_id, status, total_amount) VALUES (?, 'PENDING', 0) RETURNING id",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : null
     },
     "searchProductsByCategory" : {
       "queryId" : "searchProductsByCategory",
-      "sampleCount" : 1076,
-      "meanMs" : 6.663568773234201,
+      "sampleCount" : 1082,
+      "meanMs" : 6.333641404805915,
       "medianMs" : 6.0,
       "p95Ms" : 10.0,
-      "p99Ms" : 17.0,
+      "p99Ms" : 18.0,
       "minMs" : 4,
-      "maxMs" : 34,
-      "callsPerMinute" : 538.5475233153707,
+      "maxMs" : 29,
+      "callsPerMinute" : 541.5008883216975,
       "capturedSql" : "SELECT id, name, price, stock_quantity, rating FROM products WHERE active = true AND category = ? ORDER BY rating DESC LIMIT 20 OFFSET 0",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : [ {
@@ -460,39 +460,43 @@
         "price" : 137.15,
         "rating" : 5.00,
         "stock_quantity" : 30
+      }, {
+        "price" : 417.87,
+        "rating" : 5.00,
+        "stock_quantity" : 172
       } ]
     },
     "updateInventory" : {
       "queryId" : "updateInventory",
       "sampleCount" : 110,
-      "meanMs" : 2.6636363636363636,
+      "meanMs" : 2.772727272727273,
       "medianMs" : 3.0,
       "p95Ms" : 4.0,
-      "p99Ms" : 7.0,
+      "p99Ms" : 5.0,
       "minMs" : 2,
-      "maxMs" : 11,
-      "callsPerMinute" : 55.05597357313268,
+      "maxMs" : 7,
+      "callsPerMinute" : 55.05092210294522,
       "capturedSql" : "UPDATE products SET stock_quantity = stock_quantity + ? WHERE id = ? AND stock_quantity + ? >= 0",
       "avgRowCount" : 1.0,
       "sanitizedRealData" : null
     },
     "getProductDetail" : {
       "queryId" : "getProductDetail",
-      "sampleCount" : 1076,
-      "meanMs" : 0.4962825278810409,
+      "sampleCount" : 1082,
+      "meanMs" : 0.411275415896488,
       "medianMs" : 0.0,
       "p95Ms" : 1.0,
-      "p99Ms" : 3.0,
+      "p99Ms" : 2.0,
       "minMs" : 0,
-      "maxMs" : 7,
-      "callsPerMinute" : 538.5475233153707,
+      "maxMs" : 5,
+      "callsPerMinute" : 541.5008883216975,
       "capturedSql" : "SELECT id, name, category, price, stock_quantity, rating, active FROM products WHERE id = ?",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : [ {
         "price" : 147.68,
         "rating" : 1.60,
         "category" : "clothing",
-        "stock_quantity" : 395
+        "stock_quantity" : 392
       }, {
         "price" : 13.47,
         "rating" : 1.34,
@@ -517,7 +521,7 @@
         "price" : 156.92,
         "rating" : 4.64,
         "category" : "books",
-        "stock_quantity" : 421
+        "stock_quantity" : 420
       }, {
         "price" : 17.42,
         "rating" : 4.59,
@@ -542,7 +546,7 @@
         "price" : 323.67,
         "rating" : 2.22,
         "category" : "home",
-        "stock_quantity" : 285
+        "stock_quantity" : 282
       }, {
         "price" : 165.88,
         "rating" : 3.46,
@@ -557,7 +561,7 @@
         "price" : 170.33,
         "rating" : 4.25,
         "category" : "electronics",
-        "stock_quantity" : 84
+        "stock_quantity" : 83
       }, {
         "price" : 87.17,
         "rating" : 2.34,
@@ -572,7 +576,7 @@
         "price" : 139.69,
         "rating" : 4.13,
         "category" : "clothing",
-        "stock_quantity" : 6
+        "stock_quantity" : 5
       }, {
         "price" : 89.88,
         "rating" : 1.14,
@@ -592,12 +596,12 @@
         "price" : 79.45,
         "rating" : 3.02,
         "category" : "clothing",
-        "stock_quantity" : 420
+        "stock_quantity" : 419
       }, {
         "price" : 431.28,
         "rating" : 4.26,
         "category" : "books",
-        "stock_quantity" : 337
+        "stock_quantity" : 336
       }, {
         "price" : 209.36,
         "rating" : 4.36,
@@ -642,7 +646,7 @@
         "price" : 147.68,
         "rating" : 1.60,
         "category" : "clothing",
-        "stock_quantity" : 394
+        "stock_quantity" : 391
       }, {
         "price" : 120.49,
         "rating" : 4.81,
@@ -657,7 +661,7 @@
         "price" : 121.21,
         "rating" : 1.16,
         "category" : "clothing",
-        "stock_quantity" : 92
+        "stock_quantity" : 91
       }, {
         "price" : 423.00,
         "rating" : 3.69,
@@ -697,7 +701,7 @@
         "price" : 174.64,
         "rating" : 3.22,
         "category" : "sports",
-        "stock_quantity" : 263
+        "stock_quantity" : 261
       }, {
         "price" : 199.47,
         "rating" : 4.60,
@@ -707,7 +711,7 @@
         "price" : 48.18,
         "rating" : 4.10,
         "category" : "clothing",
-        "stock_quantity" : 152
+        "stock_quantity" : 151
       }, {
         "price" : 12.68,
         "rating" : 4.28,
@@ -722,12 +726,12 @@
         "price" : 130.85,
         "rating" : 3.30,
         "category" : "clothing",
-        "stock_quantity" : 478
+        "stock_quantity" : 477
       }, {
         "price" : 243.33,
         "rating" : 3.54,
         "category" : "electronics",
-        "stock_quantity" : 99
+        "stock_quantity" : 98
       }, {
         "price" : 175.30,
         "rating" : 4.26,
@@ -742,7 +746,7 @@
         "price" : 323.67,
         "rating" : 2.22,
         "category" : "home",
-        "stock_quantity" : 284
+        "stock_quantity" : 281
       }, {
         "price" : 466.44,
         "rating" : 4.62,
@@ -762,22 +766,22 @@
         "price" : 170.33,
         "rating" : 4.25,
         "category" : "electronics",
-        "stock_quantity" : 84
+        "stock_quantity" : 83
       }, {
         "price" : 243.33,
         "rating" : 3.54,
         "category" : "electronics",
-        "stock_quantity" : 98
+        "stock_quantity" : 97
       }, {
         "price" : 304.79,
         "rating" : 4.14,
         "category" : "sports",
-        "stock_quantity" : 85
+        "stock_quantity" : 84
       }, {
         "price" : 144.09,
         "rating" : 1.11,
         "category" : "books",
-        "stock_quantity" : 480
+        "stock_quantity" : 479
       }, {
         "price" : 130.13,
         "rating" : 3.62,
@@ -792,7 +796,7 @@
         "price" : 318.71,
         "rating" : 2.46,
         "category" : "sports",
-        "stock_quantity" : 227
+        "stock_quantity" : 226
       }, {
         "price" : 298.51,
         "rating" : 1.31,
@@ -807,12 +811,12 @@
         "price" : 405.73,
         "rating" : 1.70,
         "category" : "electronics",
-        "stock_quantity" : 250
+        "stock_quantity" : 248
       }, {
         "price" : 472.42,
         "rating" : 1.11,
         "category" : "sports",
-        "stock_quantity" : 121
+        "stock_quantity" : 120
       }, {
         "price" : 353.60,
         "rating" : 3.72,
@@ -842,7 +846,7 @@
         "price" : 290.04,
         "rating" : 4.05,
         "category" : "electronics",
-        "stock_quantity" : 290
+        "stock_quantity" : 289
       }, {
         "price" : 35.95,
         "rating" : 1.07,
@@ -852,12 +856,12 @@
         "price" : 79.26,
         "rating" : 3.62,
         "category" : "home",
-        "stock_quantity" : 29
+        "stock_quantity" : 28
       }, {
         "price" : 49.14,
         "rating" : 3.99,
         "category" : "electronics",
-        "stock_quantity" : 114
+        "stock_quantity" : 113
       }, {
         "price" : 205.87,
         "rating" : 2.81,
@@ -867,7 +871,7 @@
         "price" : 144.09,
         "rating" : 1.11,
         "category" : "books",
-        "stock_quantity" : 479
+        "stock_quantity" : 478
       }, {
         "price" : 377.98,
         "rating" : 2.44,
@@ -877,7 +881,7 @@
         "price" : 472.42,
         "rating" : 1.11,
         "category" : "sports",
-        "stock_quantity" : 121
+        "stock_quantity" : 120
       }, {
         "price" : 92.15,
         "rating" : 3.73,
@@ -887,12 +891,12 @@
         "price" : 231.39,
         "rating" : 4.49,
         "category" : "books",
-        "stock_quantity" : 237
+        "stock_quantity" : 236
       }, {
         "price" : 323.67,
         "rating" : 2.22,
         "category" : "home",
-        "stock_quantity" : 284
+        "stock_quantity" : 281
       }, {
         "price" : 351.17,
         "rating" : 2.67,
@@ -907,12 +911,12 @@
         "price" : 117.76,
         "rating" : 3.95,
         "category" : "electronics",
-        "stock_quantity" : 238
+        "stock_quantity" : 237
       }, {
         "price" : 268.69,
         "rating" : 2.19,
         "category" : "electronics",
-        "stock_quantity" : 46
+        "stock_quantity" : 45
       }, {
         "price" : 398.12,
         "rating" : 2.88,
@@ -927,7 +931,7 @@
         "price" : 11.86,
         "rating" : 1.04,
         "category" : "electronics",
-        "stock_quantity" : 320
+        "stock_quantity" : 319
       }, {
         "price" : 460.85,
         "rating" : 2.14,
@@ -967,12 +971,12 @@
         "price" : 170.33,
         "rating" : 4.25,
         "category" : "electronics",
-        "stock_quantity" : 83
+        "stock_quantity" : 82
       }, {
         "price" : 466.63,
         "rating" : 1.49,
         "category" : "sports",
-        "stock_quantity" : 8
+        "stock_quantity" : 7
       }, {
         "price" : 460.28,
         "rating" : 3.25,
@@ -982,7 +986,7 @@
         "price" : 138.74,
         "rating" : 2.01,
         "category" : "clothing",
-        "stock_quantity" : 7
+        "stock_quantity" : 6
       }, {
         "price" : 352.38,
         "rating" : 3.95,
@@ -992,7 +996,7 @@
         "price" : 355.37,
         "rating" : 3.87,
         "category" : "home",
-        "stock_quantity" : 322
+        "stock_quantity" : 320
       }, {
         "price" : 317.97,
         "rating" : 3.27,
@@ -1012,48 +1016,53 @@
         "price" : 278.03,
         "rating" : 4.96,
         "category" : "home",
-        "stock_quantity" : 97
+        "stock_quantity" : 96
       }, {
         "price" : 241.94,
         "rating" : 2.84,
         "category" : "clothing",
-        "stock_quantity" : 56
+        "stock_quantity" : 55
       }, {
         "price" : 49.14,
         "rating" : 3.99,
         "category" : "electronics",
-        "stock_quantity" : 113
+        "stock_quantity" : 112
       }, {
         "price" : 345.08,
         "rating" : 2.63,
         "category" : "clothing",
         "stock_quantity" : 463
+      }, {
+        "price" : 253.29,
+        "rating" : 2.72,
+        "category" : "clothing",
+        "stock_quantity" : 17
       } ]
     },
     "checkInventory" : {
       "queryId" : "checkInventory",
       "sampleCount" : 219,
-      "meanMs" : 0.5205479452054794,
+      "meanMs" : 0.4611872146118721,
       "medianMs" : 0.0,
-      "p95Ms" : 2.0,
+      "p95Ms" : 1.0,
       "p99Ms" : 4.0,
       "minMs" : 0,
-      "maxMs" : 7,
-      "callsPerMinute" : 109.61143829560052,
+      "maxMs" : 5,
+      "callsPerMinute" : 109.60138127768185,
       "capturedSql" : "SELECT stock_quantity FROM products WHERE id = ?",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : [ {
         "stock_quantity" : 367
       }, {
-        "stock_quantity" : 84
+        "stock_quantity" : 83
       }, {
         "stock_quantity" : 497
       }, {
         "stock_quantity" : 168
       }, {
-        "stock_quantity" : 337
+        "stock_quantity" : 336
       }, {
-        "stock_quantity" : 394
+        "stock_quantity" : 391
       }, {
         "stock_quantity" : 480
       }, {
@@ -1061,29 +1070,29 @@
       }, {
         "stock_quantity" : 173
       }, {
-        "stock_quantity" : 284
+        "stock_quantity" : 281
       }, {
         "stock_quantity" : 248
       }, {
-        "stock_quantity" : 480
-      }, {
-        "stock_quantity" : 250
-      }, {
         "stock_quantity" : 479
+      }, {
+        "stock_quantity" : 248
+      }, {
+        "stock_quantity" : 478
       }, {
         "stock_quantity" : 190
       }, {
-        "stock_quantity" : 121
+        "stock_quantity" : 120
       }, {
         "stock_quantity" : 428
       }, {
-        "stock_quantity" : 46
+        "stock_quantity" : 45
       }, {
         "stock_quantity" : 122
       }, {
-        "stock_quantity" : 83
+        "stock_quantity" : 82
       }, {
-        "stock_quantity" : 113
+        "stock_quantity" : 112
       }, {
         "stock_quantity" : 196
       } ]
