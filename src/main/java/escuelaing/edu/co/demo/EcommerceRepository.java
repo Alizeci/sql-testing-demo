@@ -10,23 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Repositorio JDBC puro de la aplicación demo e-commerce.
+ * Pure JDBC repository for the e-commerce demo.
  *
- * <p>No usa Spring ni ORM — solo {@link PreparedStatement} estándar.
- * Representa cómo cualquier equipo Java escribiría su capa de acceso a datos.</p>
- *
- * <p>Cada método abre un {@link CaptureContext} con el {@code queryId} declarado
- * en {@link ProductRepository} (Fase 1). Esto permite que el {@code JdbcWrapper}
- * asocie la latencia medida al identificador correcto sin modificar la firma
- * JDBC ni agregar dependencias al código de negocio.</p>
- *
- * <h3>Escenario de degradación demostrable</h3>
- * <p>La query de {@link #searchByCategory} está paginada y ordenada por rating,
- * apoyándose en {@code idx_products_active_category}. Una feature aparentemente
- * razonable — ordenar por popularidad agregando un {@code LEFT JOIN order_items}
- * con {@code GROUP BY} — no tiene índice de soporte y degrada el p95 por encima
- * del SLA de 300 ms con datos a escala de producción. El problema no es visible
- * en entornos de desarrollo con pocos datos.</p>
+ * <p>No Spring, no ORM — standard {@link PreparedStatement} only.
+ * Each method opens a {@link CaptureContext} so that {@code JdbcWrapper}
+ * associates measured latency with the correct {@code queryId} declared
+ * in {@link ProductRepository}.</p>
  */
 public class EcommerceRepository {
 
@@ -37,19 +26,15 @@ public class EcommerceRepository {
     }
 
     // -------------------------------------------------------------------------
-    // Consultas de catálogo
+    // Catalog queries
     // -------------------------------------------------------------------------
 
     /**
-     * Busca productos activos por categoría con paginación explícita.
+     * Returns active products in a category, ordered by rating, paginated.
      *
-     * <p><b>Baseline:</b> paginación estándar ordenada por rating, apoyada en
-     * {@code idx_products_active_category}. p95 esperado: &lt; 50 ms.</p>
-     *
-     * <p><b>Degradación típica:</b> agregar un {@code LEFT JOIN order_items}
-     * con {@code GROUP BY} para ordenar por popularidad fuerza un hash aggregate
-     * sobre millones de filas sin índice de soporte — invisible en dev,
-     * crítico en producción.</p>
+     * <p>Backed by {@code idx_products_active_category}. Adding an order-by-popularity
+     * variant via {@code LEFT JOIN order_items GROUP BY} removes index support
+     * and degrades p95 above the 300 ms SLA at production scale.</p>
      */
     public List<String> searchByCategory(String category) throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("searchProductsByCategory");
@@ -68,9 +53,7 @@ public class EcommerceRepository {
         }
     }
 
-    /**
-     * Obtiene el detalle de un producto por ID (PK lookup).
-     */
+    /** Fetches full product details by primary key. */
     public void getProductDetail(int productId) throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("getProductDetail");
              PreparedStatement ps = conn.prepareStatement(
@@ -82,9 +65,7 @@ public class EcommerceRepository {
         }
     }
 
-    /**
-     * Verifica el stock disponible de un producto antes del checkout.
-     */
+    /** Returns available stock for a product. */
     public void checkInventory(int productId) throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("checkInventory");
              PreparedStatement ps = conn.prepareStatement(
@@ -123,9 +104,9 @@ public class EcommerceRepository {
     // -------------------------------------------------------------------------
 
     /**
-     * Crea una nueva orden para el cliente dado.
+     * Creates a new order for the given customer.
      *
-     * @return ID de la orden creada, o {@code -1} si falla
+     * @return the new order ID, or {@code -1} if the insert fails
      */
     public int createOrder(int customerId) throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("createOrder");
@@ -140,10 +121,9 @@ public class EcommerceRepository {
     }
 
     /**
-     * Descuenta unidades del stock de un producto (venta confirmada).
+     * Adjusts stock quantity by {@code delta}; no-ops if stock would go negative.
      *
-     * @param productId producto a actualizar
-     * @param delta     cantidad a descontar (negativo = salida)
+     * @param delta units to add (negative for stock reduction)
      */
     public void updateInventory(int productId, int delta) throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("updateInventory");
