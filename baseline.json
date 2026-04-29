@@ -1,0 +1,187 @@
+{
+  "commitSha" : "53566e5fbe2afa938ead23b3c3bd1a1c49e7a0d4",
+  "profileName" : "ecommerce-demo",
+  "savedAt" : "2026-04-29T02:36:43.725432783Z",
+  "queries" : {
+    "createOrder" : {
+      "queryId" : "createOrder",
+      "sampleCount" : 229,
+      "meanMs" : 7.22707423580786,
+      "medianMs" : 6.0,
+      "p95Ms" : 18.0,
+      "p99Ms" : 25.0,
+      "minMs" : 3,
+      "maxMs" : 61,
+      "callsPerMinute" : 458.0,
+      "planCost" : 0.0,
+      "executionPlanText" : null,
+      "slaComplianceRate" : 100.0,
+      "slaRiskPct" : 9.0,
+      "latencyTimeSeries" : [ {
+        "elapsedMs" : 1777430183772,
+        "p50Ms" : 6.0,
+        "p95Ms" : 22.0,
+        "p99Ms" : 41.0,
+        "phaseName" : "measure"
+      }, {
+        "elapsedMs" : 1777430193843,
+        "p50Ms" : 6.0,
+        "p95Ms" : 20.0,
+        "p99Ms" : 61.0,
+        "phaseName" : "measure"
+      }, {
+        "elapsedMs" : 1777430203710,
+        "p50Ms" : 5.0,
+        "p95Ms" : 9.0,
+        "p99Ms" : 23.0,
+        "phaseName" : "measure"
+      } ],
+      "verdict" : "PASS",
+      "failReason" : null
+    },
+    "updateInventory" : {
+      "queryId" : "updateInventory",
+      "sampleCount" : 229,
+      "meanMs" : 4.96943231441048,
+      "medianMs" : 5.0,
+      "p95Ms" : 8.0,
+      "p99Ms" : 10.0,
+      "minMs" : 2,
+      "maxMs" : 13,
+      "callsPerMinute" : 458.0,
+      "planCost" : 0.0,
+      "executionPlanText" : null,
+      "slaComplianceRate" : 100.0,
+      "slaRiskPct" : 8.0,
+      "latencyTimeSeries" : [ {
+        "elapsedMs" : 1777430183772,
+        "p50Ms" : 5.0,
+        "p95Ms" : 9.0,
+        "p99Ms" : 12.0,
+        "phaseName" : "measure"
+      }, {
+        "elapsedMs" : 1777430193843,
+        "p50Ms" : 5.0,
+        "p95Ms" : 8.0,
+        "p99Ms" : 13.0,
+        "phaseName" : "measure"
+      }, {
+        "elapsedMs" : 1777430203710,
+        "p50Ms" : 4.0,
+        "p95Ms" : 6.0,
+        "p99Ms" : 10.0,
+        "phaseName" : "measure"
+      } ],
+      "verdict" : "PASS",
+      "failReason" : null
+    },
+    "searchProductsByCategory" : {
+      "queryId" : "searchProductsByCategory",
+      "sampleCount" : 229,
+      "meanMs" : 4.829694323144105,
+      "medianMs" : 4.0,
+      "p95Ms" : 10.0,
+      "p99Ms" : 14.0,
+      "minMs" : 0,
+      "maxMs" : 22,
+      "callsPerMinute" : 458.0,
+      "planCost" : 0.0,
+      "executionPlanText" : null,
+      "slaComplianceRate" : 100.0,
+      "slaRiskPct" : 3.3333333333333335,
+      "latencyTimeSeries" : [ {
+        "elapsedMs" : 1777430183772,
+        "p50Ms" : 5.0,
+        "p95Ms" : 12.0,
+        "p99Ms" : 22.0,
+        "phaseName" : "measure"
+      }, {
+        "elapsedMs" : 1777430193843,
+        "p50Ms" : 5.0,
+        "p95Ms" : 10.0,
+        "p99Ms" : 12.0,
+        "phaseName" : "measure"
+      }, {
+        "elapsedMs" : 1777430203710,
+        "p50Ms" : 4.0,
+        "p95Ms" : 7.0,
+        "p99Ms" : 14.0,
+        "phaseName" : "measure"
+      } ],
+      "verdict" : "PASS",
+      "failReason" : null
+    },
+    "getProductDetail" : {
+      "queryId" : "getProductDetail",
+      "sampleCount" : 229,
+      "meanMs" : 4.096069868995633,
+      "medianMs" : 4.0,
+      "p95Ms" : 7.0,
+      "p99Ms" : 9.0,
+      "minMs" : 0,
+      "maxMs" : 17,
+      "callsPerMinute" : 458.0,
+      "planCost" : 0.0,
+      "executionPlanText" : null,
+      "slaComplianceRate" : 100.0,
+      "slaRiskPct" : 14.000000000000002,
+      "latencyTimeSeries" : [ {
+        "elapsedMs" : 1777430183772,
+        "p50Ms" : 5.0,
+        "p95Ms" : 7.0,
+        "p99Ms" : 17.0,
+        "phaseName" : "measure"
+      }, {
+        "elapsedMs" : 1777430193843,
+        "p50Ms" : 4.0,
+        "p95Ms" : 9.0,
+        "p99Ms" : 9.0,
+        "phaseName" : "measure"
+      }, {
+        "elapsedMs" : 1777430203710,
+        "p50Ms" : 3.0,
+        "p95Ms" : 6.0,
+        "p99Ms" : 9.0,
+        "phaseName" : "measure"
+      } ],
+      "verdict" : "PASS",
+      "failReason" : null
+    },
+    "checkInventory" : {
+      "queryId" : "checkInventory",
+      "sampleCount" : 229,
+      "meanMs" : 2.5851528384279474,
+      "medianMs" : 3.0,
+      "p95Ms" : 4.0,
+      "p99Ms" : 6.0,
+      "minMs" : 0,
+      "maxMs" : 7,
+      "callsPerMinute" : 458.0,
+      "planCost" : 0.0,
+      "executionPlanText" : null,
+      "slaComplianceRate" : 100.0,
+      "slaRiskPct" : 13.333333333333334,
+      "latencyTimeSeries" : [ {
+        "elapsedMs" : 1777430183772,
+        "p50Ms" : 3.0,
+        "p95Ms" : 5.0,
+        "p99Ms" : 7.0,
+        "phaseName" : "measure"
+      }, {
+        "elapsedMs" : 1777430193843,
+        "p50Ms" : 3.0,
+        "p95Ms" : 4.0,
+        "p99Ms" : 6.0,
+        "phaseName" : "measure"
+      }, {
+        "elapsedMs" : 1777430203710,
+        "p50Ms" : 2.0,
+        "p95Ms" : 4.0,
+        "p99Ms" : 5.0,
+        "phaseName" : "measure"
+      } ],
+      "verdict" : "PASS",
+      "failReason" : null
+    }
+  }
+}
