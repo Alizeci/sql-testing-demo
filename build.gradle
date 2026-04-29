@@ -52,6 +52,10 @@ tasks.named('compileJava') {
     options.annotationProcessorPath = configurations.annotationProcessor
 }
 
+bootJar {
+    archiveFileName = 'sql-testing-demo.jar'
+}
+
 // Runs the traffic simulator (Phase 2)
 tasks.register('runSimulator', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath

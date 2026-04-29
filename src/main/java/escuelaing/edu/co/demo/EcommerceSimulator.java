@@ -72,6 +72,7 @@ public class EcommerceSimulator {
         registry.load();
 
         CaptureToggle toggle = new CaptureToggle();
+        toggle.enable();
         MetricsBuffer buffer = new MetricsBuffer();
         buffer.start();
 
