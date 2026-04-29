@@ -13,7 +13,7 @@ on:
         default: '120'
 
 jobs:
-  capture-profile:
+  call-cpt-capture-profile:
     uses: Alizeci/CPT-SQL/.github/workflows/capture-production-profile.yml@main
     with:
       simulation-secs: ${{ fromJson(inputs.simulation-secs || '120') }}

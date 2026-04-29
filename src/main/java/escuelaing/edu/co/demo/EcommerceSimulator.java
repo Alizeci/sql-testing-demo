@@ -11,8 +11,9 @@ import escuelaing.edu.co.infrastructure.capture.LoadProfileBuilder;
 import escuelaing.edu.co.infrastructure.capture.MetricsBuffer;
 import escuelaing.edu.co.infrastructure.capture.SamplingFilter;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
-import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -145,8 +146,12 @@ public class EcommerceSimulator {
     }
 
     private static void applySchema(Connection conn) throws Exception {
-        String script = Files.readString(
-                Path.of("sql-testing-demo/src/main/resources/schema-ecommerce.sql"));
+        String script;
+        try (InputStream in = EcommerceSimulator.class.getClassLoader()
+                .getResourceAsStream("schema-ecommerce.sql")) {
+            if (in == null) throw new IllegalStateException("schema-ecommerce.sql not on classpath");
+            script = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        }
         try (Statement st = conn.createStatement()) {
             for (String stmt : script.split(";")) {
                 String s = stmt.strip();

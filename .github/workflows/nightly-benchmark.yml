@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  nightly:
+  call-cpt-nightly-benchmark:
     uses: Alizeci/CPT-SQL/.github/workflows/nightly-benchmark.yml@main
     with:
       schema-script: src/main/resources/schema-ecommerce.sql

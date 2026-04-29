@@ -8,7 +8,7 @@ on:
       - 'load-profile.json'
 
 jobs:
-  update-baseline:
+  call-cpt-update-baseline:
     uses: Alizeci/CPT-SQL/.github/workflows/update-baseline.yml@main
     with:
       schema-script: src/main/resources/schema-ecommerce.sql
