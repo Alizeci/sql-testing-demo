@@ -94,8 +94,32 @@ public class EcommerceRepository {
         }
     }
 
+    /**
+     * Returns sales revenue, order count and average price grouped by product category.
+     */
+    public List<String> salesDashboard() throws SQLException {
+        try (CaptureContext ignored = CaptureContext.begin("salesDashboard");
+             PreparedStatement ps = conn.prepareStatement(
+                     "SELECT p.category, " +
+                     "       COUNT(DISTINCT o.id)             AS total_orders, " +
+                     "       SUM(oi.quantity * oi.unit_price) AS total_revenue, " +
+                     "       AVG(oi.unit_price)               AS avg_price " +
+                     "FROM products p " +
+                     "JOIN order_items oi ON oi.product_id = p.id " +
+                     "JOIN orders o       ON o.id = oi.order_id " +
+                     "WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') " +
+                     "GROUP BY p.category " +
+                     "ORDER BY total_revenue DESC")) {
+            try (ResultSet rs = ps.executeQuery()) {
+                List<String> categories = new ArrayList<>();
+                while (rs.next()) categories.add(rs.getString("category"));
+                return categories;
+            }
+        }
+    }
+
     // -------------------------------------------------------------------------
-    // Operaciones de escritura
+    // Write operations
     // -------------------------------------------------------------------------
 
     /**

@@ -130,6 +130,13 @@ public class EcommerceSimulator {
                     }
                 }
 
+                if (rng.nextInt(10) == 0) {
+                    try { repo.salesDashboard(); }
+                    catch (SQLException e) {
+                        LOG.fine("[Simulator] salesDashboard: " + e.getMessage());
+                    }
+                }
+
                 Thread.sleep(THINK_TIME_MS);
             }
         }

@@ -6,6 +6,8 @@ on:
     paths-ignore:
       - 'baseline.json'
       - 'load-profile.json'
+  schedule:
+    - cron: '0 3 * * *'
   workflow_dispatch:
 
 jobs:
@@ -14,5 +16,5 @@ jobs:
     with:
       schema-script: src/main/resources/schema-ecommerce.sql
       jar-path: build/libs/sql-testing-demo.jar
-      rows-per-table: 10000
-      test-profile: light
+      rows-per-table: ${{ github.event_name == 'schedule' && 50000 || 10000 }}
+      test-profile: ${{ github.event_name == 'schedule' && 'normal' || 'light' }}

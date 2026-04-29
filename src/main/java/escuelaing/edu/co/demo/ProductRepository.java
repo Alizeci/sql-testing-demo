@@ -144,4 +144,40 @@ public class ProductRepository {
         // INSERT INTO inventory_log(product_id, delta, reason)
         // VALUES (?, ?, 'SALE')
     }
+
+    // -------------------------------------------------------------------------
+    // Analytics / Dashboard (read analítico — baja frecuencia, alto costo)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Dashboard de ventas por categoría.
+     *
+     * <p>Consulta analítica que alimenta el dashboard ejecutivo con revenue,
+     * órdenes y precio promedio por categoría. La versión base usa agregaciones
+     * simples sobre tres tablas con índices de soporte.</p>
+     *
+     * <p>Enriquecer la vista con window functions ({@code RANK() OVER},
+     * {@code PERCENTILE_CONT}) y joins adicionales por tier de cliente degrada
+     * el plan: el planner no puede usar índices para las operaciones de ventana
+     * y debe materializar el resultado completo en memoria antes de ordenar.
+     * Invisible con pocos datos; crítico a escala de producción.</p>
+     */
+    @SqlQuery(queryId = "salesDashboard",
+              description = "Dashboard de ventas: revenue, órdenes y precio promedio por categoría")
+    @Req(maxResponseTimeMs = 200,
+         priority = Req.Priority.MEDIUM,
+         allowPlanChange = false,
+         description = "SLA: 200 ms p95. Window functions sin índice fuerzan full sort en memoria — crítico a escala")
+    public void salesDashboard() {
+        // SELECT p.category,
+        //        COUNT(DISTINCT o.id)             AS total_orders,
+        //        SUM(oi.quantity * oi.unit_price) AS total_revenue,
+        //        AVG(oi.unit_price)               AS avg_price
+        // FROM products p
+        // JOIN order_items oi ON oi.product_id = p.id
+        // JOIN orders o       ON o.id = oi.order_id
+        // WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED')
+        // GROUP BY p.category
+        // ORDER BY total_revenue DESC
+    }
 }
