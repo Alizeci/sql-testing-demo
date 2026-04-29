@@ -55,7 +55,7 @@ public class EcommerceSimulator {
     private static final Logger LOG = Logger.getLogger(EcommerceSimulator.class.getName());
 
     private static final int SIMULATION_SECS =
-            Integer.parseInt(System.getenv().getOrDefault("SIMULATION_SECS", "60"));
+            Integer.parseInt(System.getenv().getOrDefault("SIMULATION_SECS", "180"));
     private static final int THINK_TIME_MS = 100;
 
     private static final String[] CATEGORIES =
