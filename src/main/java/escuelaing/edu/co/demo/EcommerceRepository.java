@@ -76,7 +76,11 @@ public class EcommerceRepository {
     }
 
     /**
-     * Returns sales revenue, order count and average price grouped by product category.
+     * Returns sales revenue, order count, average price and active product count per category.
+     *
+     * <p>The correlated subquery computing {@code active_products} runs once per category row,
+     * scanning {@code order_items} and {@code orders} each time. Acceptable at small data
+     * volumes; degrades above the SLA at production scale.</p>
      */
     public List<String> salesDashboard() throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("salesDashboard");
@@ -84,7 +88,13 @@ public class EcommerceRepository {
                      "SELECT p.category, " +
                      "       COUNT(DISTINCT o.id)             AS total_orders, " +
                      "       SUM(oi.quantity * oi.unit_price) AS total_revenue, " +
-                     "       AVG(oi.unit_price)               AS avg_price " +
+                     "       AVG(oi.unit_price)               AS avg_price, " +
+                     "       (SELECT COUNT(DISTINCT p2.id) " +
+                     "        FROM products p2 " +
+                     "        JOIN order_items oi2 ON oi2.product_id = p2.id " +
+                     "        JOIN orders o2       ON o2.id = oi2.order_id " +
+                     "        WHERE p2.category = p.category " +
+                     "          AND o2.status IN ('CONFIRMED','SHIPPED','DELIVERED')) AS active_products " +
                      "FROM products p " +
                      "JOIN order_items oi ON oi.product_id = p.id " +
                      "JOIN orders o       ON o.id = oi.order_id " +
