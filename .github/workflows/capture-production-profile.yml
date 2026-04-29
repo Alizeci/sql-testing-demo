@@ -8,15 +8,15 @@ on:
   workflow_dispatch:
     inputs:
       simulation-secs:
-        description: 'Simulation duration in seconds (default: 120)'
+        description: 'Simulation duration in seconds (default: 180)'
         required: false
-        default: '120'
+        default: '180'
 
 jobs:
   call-cpt-capture-profile:
     uses: Alizeci/CPT-SQL/.github/workflows/capture-production-profile.yml@main
     with:
-      simulation-secs: ${{ fromJson(inputs.simulation-secs || '120') }}
+      simulation-secs: ${{ fromJson(inputs.simulation-secs || '180') }}
     secrets:
       DB_URL: ${{ secrets.DEMO_DB_URL }}
       DB_USER: ${{ secrets.DEMO_DB_USER }}
