@@ -52,6 +52,10 @@ tasks.named('compileJava') {
     options.annotationProcessorPath = configurations.annotationProcessor
 }
 
+springBoot {
+    mainClass = 'escuelaing.edu.co.infrastructure.BenchmarkMain'
+}
+
 bootJar {
     archiveFileName = 'sql-testing-demo.jar'
 }
