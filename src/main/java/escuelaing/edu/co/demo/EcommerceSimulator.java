@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  * traffic flows through {@link JdbcWrapper} automatically. This class exists
  * only because the demo has no real users; it stands in for them by calling
  * the five instrumented queries in proportions that reflect the declared
- * traffic distribution in {@link ProductRepository}.</p>
+ * traffic distribution in {@link EcommerceQueryRegistry}.</p>
  *
  * <h3>Usage</h3>
  * <pre>
@@ -93,7 +93,7 @@ public class EcommerceSimulator {
             LOG.info("[Simulator] statement_timeout=" + stmtTimeoutMs + "ms set.");
 
             Connection conn = wrapper.wrap(raw);
-            EcommerceRepository repo = new EcommerceRepository(conn);
+            EcommerceJdbcRepository repo = new EcommerceJdbcRepository(conn);
             Random rng = new Random(42);
 
             LOG.info("[Simulator] Simulating traffic for " + SIMULATION_SECS + " s...");

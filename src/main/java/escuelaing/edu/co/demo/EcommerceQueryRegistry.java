@@ -4,26 +4,14 @@ import escuelaing.edu.co.processor.annotation.Req;
 import escuelaing.edu.co.processor.annotation.SqlQuery;
 
 /**
- * Query registry for the e-commerce demo application.
+ * CPT-SQL query registry for the e-commerce demo.
  *
- * <p>Annotated with {@link SqlQuery} and {@link Req} to drive the full CPT-SQL pipeline:</p>
- * <ol>
- *   <li>Phase 1 — annotation processor extracts metadata and emits {@code queries.json} at compile time.</li>
- *   <li>Phase 2 — {@code JdbcWrapper} captures real latencies and SQL in production, building the {@code LoadProfile}.</li>
- *   <li>Phase 3 — {@code BenchmarkRunner} replays these queries against the mirror DB under the configured
- *       {@code TestProfile} and detects degradations via {@code DegradationDetector}.</li>
- * </ol>
- *
- * <h3>Demonstrable degradation scenario</h3>
- * <p>Adding popularity-based ordering to {@code searchProductsByCategory} via a
- * {@code LEFT JOIN order_items GROUP BY} is functionally correct but unindexed.
- * At production scale the detector raises:</p>
- * <ul>
- *   <li>{@code PLAN_CHANGED} — planner switches from index scan to hash aggregate.</li>
- *   <li>{@code P95_EXCEEDED} — p95 latency exceeds the 300 ms SLA.</li>
- * </ul>
+ * <p>Methods are annotated with {@link SqlQuery} and {@link Req} so that the
+ * annotation processor emits {@code queries.json} at compile time (Phase 1).
+ * Method bodies are empty — execution happens in {@link EcommerceJdbcRepository},
+ * which links each call to its {@code queryId} via {@code CaptureContext}.</p>
  */
-public class ProductRepository {
+public class EcommerceQueryRegistry {
 
     // -------------------------------------------------------------------------
     // Catalog queries (read-heavy — ~80 % of normal traffic)
@@ -42,13 +30,7 @@ public class ProductRepository {
          priority = Req.Priority.HIGH,
          allowPlanChange = false,
          description = "SLA: 300 ms p95. Plan change forbidden — an unindexed JOIN triggers a hash aggregate over millions of rows")
-    public void searchProductsByCategory(String category, int limit, int offset) {
-        // SELECT id, name, price, stock_quantity, rating
-        // FROM products
-        // WHERE active = true AND category = ?
-        // ORDER BY rating DESC
-        // LIMIT 20 OFFSET 0
-    }
+    public void searchProductsByCategory(String category, int limit, int offset) {}
 
     /**
      * Fetches full product details by primary key.
@@ -62,11 +44,7 @@ public class ProductRepository {
          priority = Req.Priority.HIGH,
          allowPlanChange = false,
          description = "SLA: 50 ms p95. PK lookup — any plan change is a degradation")
-    public void getProductDetail(int productId) {
-        // SELECT id, name, category, price, stock_quantity, rating, active
-        // FROM products
-        // WHERE id = ?
-    }
+    public void getProductDetail(int productId) {}
 
     // -------------------------------------------------------------------------
     // Inventory queries (critical read — ~10 % of normal traffic)
@@ -85,9 +63,7 @@ public class ProductRepository {
          priority = Req.Priority.HIGH,
          allowPlanChange = false,
          description = "SLA: 30 ms p95. Critical pre-checkout read — plan change forbidden")
-    public void checkInventory(int productId) {
-        // SELECT stock_quantity FROM products WHERE id = ?
-    }
+    public void checkInventory(int productId) {}
 
     // -------------------------------------------------------------------------
     // Order queries (write — ~10 % of normal traffic, up to 60 % at peak)
@@ -106,14 +82,7 @@ public class ProductRepository {
          priority = Req.Priority.HIGH,
          allowPlanChange = true,
          description = "SLA: 200 ms p95. Plan change allowed — multi-table write")
-    public void createOrder(int customerId, int productId, int quantity) {
-        // BEGIN
-        //   INSERT INTO orders(customer_id, status, total_amount) VALUES (?, 'PENDING', ?)
-        //   INSERT INTO order_items(order_id, product_id, quantity, unit_price) VALUES (?,?,?,?)
-        //   UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ? AND stock_quantity >= ?
-        //   INSERT INTO inventory_log(product_id, delta, reason) VALUES (?, ?, 'SALE')
-        // COMMIT
-    }
+    public void createOrder(int customerId, int productId, int quantity) {}
 
     /**
      * Adjusts stock quantity by {@code delta}; no-ops if stock would go negative.
@@ -127,14 +96,7 @@ public class ProductRepository {
          priority = Req.Priority.HIGH,
          allowPlanChange = false,
          description = "SLA: 100 ms p95. Critical concurrent write — plan change forbidden")
-    public void updateInventory(int productId, int delta) {
-        // UPDATE products
-        // SET stock_quantity = stock_quantity + ?
-        // WHERE id = ?
-        //
-        // INSERT INTO inventory_log(product_id, delta, reason)
-        // VALUES (?, ?, 'SALE')
-    }
+    public void updateInventory(int productId, int delta) {}
 
     // -------------------------------------------------------------------------
     // Analytics / Dashboard (low-frequency, high-cost analytical read)
@@ -154,16 +116,5 @@ public class ProductRepository {
          priority = Req.Priority.MEDIUM,
          allowPlanChange = false,
          description = "SLA: 200 ms p95. Unindexed window functions force a full in-memory sort — critical at scale")
-    public void salesDashboard() {
-        // SELECT p.category,
-        //        COUNT(DISTINCT o.id)             AS total_orders,
-        //        SUM(oi.quantity * oi.unit_price) AS total_revenue,
-        //        AVG(oi.unit_price)               AS avg_price
-        // FROM products p
-        // JOIN order_items oi ON oi.product_id = p.id
-        // JOIN orders o       ON o.id = oi.order_id
-        // WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED')
-        // GROUP BY p.category
-        // ORDER BY total_revenue DESC
-    }
+    public void salesDashboard() {}
 }

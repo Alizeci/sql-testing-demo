@@ -10,18 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Pure JDBC repository for the e-commerce demo.
+ * Pure JDBC implementation of the e-commerce queries.
  *
  * <p>No Spring, no ORM — standard {@link PreparedStatement} only.
  * Each method opens a {@link CaptureContext} so that {@code JdbcWrapper}
  * associates measured latency with the correct {@code queryId} declared
- * in {@link ProductRepository}.</p>
+ * in {@link EcommerceQueryRegistry}.</p>
  */
-public class EcommerceRepository {
+public class EcommerceJdbcRepository {
 
     private final Connection conn;
 
-    public EcommerceRepository(Connection conn) {
+    public EcommerceJdbcRepository(Connection conn) {
         this.conn = conn;
     }
 
