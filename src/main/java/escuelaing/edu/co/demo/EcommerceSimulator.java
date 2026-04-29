@@ -171,10 +171,13 @@ public class EcommerceSimulator {
         LOG.info("[Simulator] Schema applied.");
     }
 
+    private static final String[] ORDER_STATUSES =
+            {"CONFIRMED", "CONFIRMED", "SHIPPED", "SHIPPED", "DELIVERED"};
+
     private static void insertSeedData(Connection conn) throws SQLException {
-        try (PreparedStatement chk = conn.prepareStatement("SELECT COUNT(*) FROM products");
+        try (PreparedStatement chk = conn.prepareStatement("SELECT COUNT(*) FROM orders");
              ResultSet rs = chk.executeQuery()) {
-            if (rs.next() && rs.getLong(1) > 0) {
+            if (rs.next() && rs.getLong(1) >= 20_000) {
                 LOG.info("[Simulator] Seed data already exists — skipping.");
                 return;
             }
@@ -183,6 +186,7 @@ public class EcommerceSimulator {
         Random rng = new Random(42);
         conn.setAutoCommit(false);
 
+        // Customers + products
         try (PreparedStatement pc = conn.prepareStatement(
                 "INSERT INTO customers(name, email, tier) VALUES(?, ?, ?) ON CONFLICT DO NOTHING");
              PreparedStatement pp = conn.prepareStatement(
@@ -212,8 +216,48 @@ public class EcommerceSimulator {
             conn.commit();
         }
 
+        // Orders: 20 000 rows skewed toward fulfilled statuses so salesDashboard has data
+        try (PreparedStatement po = conn.prepareStatement(
+                "INSERT INTO orders(customer_id, status, total_amount) VALUES(?, ?, ?)")) {
+            for (int i = 0; i < 20_000; i++) {
+                po.setInt(1, rng.nextInt(5000) + 1);
+                po.setString(2, ORDER_STATUSES[rng.nextInt(ORDER_STATUSES.length)]);
+                po.setBigDecimal(3, BigDecimal.valueOf(100 + rng.nextInt(900)));
+                po.addBatch();
+                if ((i + 1) % 1000 == 0) po.executeBatch();
+            }
+            po.executeBatch();
+            conn.commit();
+        }
+
+        // Fetch generated order IDs
+        List<Integer> orderIds = new ArrayList<>();
+        try (PreparedStatement qs = conn.prepareStatement("SELECT id FROM orders ORDER BY id");
+             ResultSet rs = qs.executeQuery()) {
+            while (rs.next()) orderIds.add(rs.getInt(1));
+        }
+
+        // order_items: 10 items per order ≈ 200 000 rows — makes salesDashboard non-trivial
+        try (PreparedStatement poi = conn.prepareStatement(
+                "INSERT INTO order_items(order_id, product_id, quantity, unit_price) VALUES(?, ?, ?, ?)")) {
+            int batch = 0;
+            for (int orderId : orderIds) {
+                for (int j = 0; j < 10; j++) {
+                    poi.setInt(1, orderId);
+                    poi.setInt(2, rng.nextInt(5000) + 1);
+                    poi.setInt(3, 1 + rng.nextInt(5));
+                    poi.setBigDecimal(4, BigDecimal.valueOf(10 + rng.nextInt(490)));
+                    poi.addBatch();
+                    if (++batch % 2000 == 0) poi.executeBatch();
+                }
+            }
+            poi.executeBatch();
+            conn.commit();
+        }
+
         conn.setAutoCommit(true);
-        LOG.info("[Simulator] Seed data inserted: 5000 customers, 5000 products.");
+        LOG.info("[Simulator] Seed data inserted: 5000 customers, 5000 products, "
+                + orderIds.size() + " orders, ~" + (orderIds.size() * 10) + " order_items.");
     }
 
     private static String env(String key, String def) {
