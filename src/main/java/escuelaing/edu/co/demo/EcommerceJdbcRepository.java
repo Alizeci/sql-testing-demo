@@ -41,10 +41,13 @@ public class EcommerceJdbcRepository {
              PreparedStatement ps = conn.prepareStatement(
                      "SELECT id, name, price, stock_quantity, rating " +
                      "FROM products " +
-                     "WHERE active = true AND category = ? " +
+                     "WHERE active = true " +
+                     "  AND category = ? " +
+                     "  AND price <= (SELECT AVG(price) FROM products WHERE category = ?) " +
                      "ORDER BY rating DESC " +
                      "LIMIT 20 OFFSET 0")) {
             ps.setString(1, category);
+            ps.setString(2, category);
             try (ResultSet rs = ps.executeQuery()) {
                 List<String> names = new ArrayList<>();
                 while (rs.next()) names.add(rs.getString("name"));
