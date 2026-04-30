@@ -14,7 +14,7 @@ jobs:
     with:
       schema-script: src/main/resources/schema-ecommerce.sql
       jar-path: build/libs/sql-testing-demo.jar
-      rows-per-table: 10000
+      rows-per-table: 400000
     secrets:
       DB_URL: ${{ secrets.DEMO_DB_URL }}
       DB_USER: ${{ secrets.DEMO_DB_USER }}
