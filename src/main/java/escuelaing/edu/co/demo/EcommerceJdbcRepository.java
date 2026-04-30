@@ -76,21 +76,38 @@ public class EcommerceJdbcRepository {
     }
 
     /**
-     * Returns sales revenue, order count and average price grouped by product category.
+     * Returns per-category revenue breakdown with ranking, share, and p95 price.
+     *
+     * <p>Degraded variant — RANK() OVER, SUM() OVER, and PERCENTILE_CONT(0.95)
+     * were added to satisfy a "richer dashboard" feature request. These window /
+     * ordered-set aggregates force PostgreSQL to materialise the full order_items
+     * scan before computing rankings, raising p95 well above the simple-query
+     * baseline and triggering BASELINE_EXCEEDED in CI.</p>
      */
     public List<String> salesDashboard() throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("salesDashboard");
              PreparedStatement ps = conn.prepareStatement(
-                     "SELECT p.category, " +
-                     "       COUNT(DISTINCT o.id)             AS total_orders, " +
-                     "       SUM(oi.quantity * oi.unit_price) AS total_revenue, " +
-                     "       AVG(oi.unit_price)               AS avg_price " +
-                     "FROM products p " +
-                     "JOIN order_items oi ON oi.product_id = p.id " +
-                     "JOIN orders o       ON o.id = oi.order_id " +
-                     "WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') " +
-                     "GROUP BY p.category " +
-                     "ORDER BY total_revenue DESC")) {
+                     "WITH category_stats AS ( " +
+                     "    SELECT p.category, " +
+                     "           COUNT(DISTINCT o.id)                                         AS total_orders, " +
+                     "           SUM(oi.quantity * oi.unit_price)                             AS total_revenue, " +
+                     "           AVG(oi.unit_price)                                           AS avg_price, " +
+                     "           PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY oi.unit_price)  AS p95_price " +
+                     "    FROM products p " +
+                     "    JOIN order_items oi ON oi.product_id = p.id " +
+                     "    JOIN orders o       ON o.id = oi.order_id " +
+                     "    WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') " +
+                     "    GROUP BY p.category " +
+                     ") " +
+                     "SELECT category, " +
+                     "       total_orders, " +
+                     "       total_revenue, " +
+                     "       avg_price, " +
+                     "       p95_price, " +
+                     "       RANK() OVER (ORDER BY total_revenue DESC)                        AS revenue_rank, " +
+                     "       ROUND(total_revenue / SUM(total_revenue) OVER () * 100, 2)       AS revenue_pct " +
+                     "FROM category_stats " +
+                     "ORDER BY revenue_rank")) {
             try (ResultSet rs = ps.executeQuery()) {
                 List<String> categories = new ArrayList<>();
                 while (rs.next()) categories.add(rs.getString("category"));
