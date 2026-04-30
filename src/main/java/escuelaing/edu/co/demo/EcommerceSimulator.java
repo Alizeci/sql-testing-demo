@@ -98,6 +98,8 @@ public class EcommerceSimulator {
             EcommerceJdbcRepository repo = new EcommerceJdbcRepository(conn);
             Random rng = new Random(42);
 
+            seedAllQueries(repo);
+
             LOG.info("[Simulator] Simulating traffic for " + SIMULATION_SECS + " s...");
             long endMs = System.currentTimeMillis() + (long) SIMULATION_SECS * 1_000;
 
@@ -260,6 +262,24 @@ public class EcommerceSimulator {
         conn.setAutoCommit(true);
         LOG.info("[Simulator] Seed data inserted: 5000 customers, 5000 products, "
                 + orderIds.size() + " orders, ~" + (orderIds.size() * 10) + " order_items.");
+    }
+
+    /**
+     * Runs each registered query exactly once before the timed simulation window.
+     * Guarantees all SQL is present in the captured profile regardless of the random
+     * call distribution during the timed phase.
+     */
+    private static void seedAllQueries(EcommerceJdbcRepository repo) {
+        LOG.info("[Simulator] Seeding all queries for guaranteed SQL capture...");
+        try { repo.searchByCategory(CATEGORIES[0]); } catch (SQLException ignored) {}
+        try { repo.getProductDetail(1); }              catch (SQLException ignored) {}
+        try { repo.checkInventory(1); }                catch (SQLException ignored) {}
+        try {
+            int orderId = repo.createOrder(1);
+            if (orderId > 0) repo.updateInventory(1, 1);
+        } catch (SQLException ignored) {}
+        try { repo.salesDashboard(); }                 catch (SQLException ignored) {}
+        LOG.info("[Simulator] Seed complete.");
     }
 
     private static String env(String key, String def) {
