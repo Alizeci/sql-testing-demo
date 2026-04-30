@@ -11,4 +11,4 @@ jobs:
     with:
       schema-script: src/main/resources/schema-ecommerce.sql
       jar-path: build/libs/sql-testing-demo.jar
-      rows-per-table: 400000
+      rows-per-table: 2000000
