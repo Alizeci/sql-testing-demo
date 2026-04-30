@@ -39,11 +39,10 @@ public class EcommerceJdbcRepository {
     public List<String> searchByCategory(String category) throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("searchProductsByCategory");
              PreparedStatement ps = conn.prepareStatement(
-                     "SELECT id, name, price, stock_quantity, rating, " +
-                     "       (SELECT SUM(oi.quantity) FROM order_items oi WHERE oi.product_id = id) AS total_sold " +
+                     "SELECT id, name, price, stock_quantity, rating " +
                      "FROM products " +
                      "WHERE active = true AND category = ? " +
-                     "ORDER BY rating DESC " +
+                     "ORDER BY (SELECT SUM(oi.quantity) FROM order_items oi WHERE oi.product_id = id) DESC NULLS LAST " +
                      "LIMIT 20")) {
             ps.setString(1, category);
             try (ResultSet rs = ps.executeQuery()) {
