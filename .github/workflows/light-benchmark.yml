@@ -3,6 +3,11 @@ name: Light Benchmark — PR Degradation Gate
 on:
   pull_request:
     branches: [main, develop, qa]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.gitignore'
+      - 'LICENSE'
 
 concurrency:
   group: light-benchmark-${{ github.event.pull_request.number }}

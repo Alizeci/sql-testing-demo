@@ -52,6 +52,10 @@ tasks.named('compileJava') {
     options.annotationProcessorPath = configurations.annotationProcessor
 }
 
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
 springBoot {
     mainClass = 'escuelaing.edu.co.infrastructure.BenchmarkMain'
 }

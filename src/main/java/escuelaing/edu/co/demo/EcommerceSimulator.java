@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import escuelaing.edu.co.domain.model.LoadProfile;
 import escuelaing.edu.co.infrastructure.analysis.QueryRegistryLoader;
+import escuelaing.edu.co.infrastructure.capture.CaptureContext;
 import escuelaing.edu.co.infrastructure.capture.CaptureToggle;
 import escuelaing.edu.co.infrastructure.capture.JdbcWrapper;
 import escuelaing.edu.co.infrastructure.capture.LoadProfileBuilder;
@@ -98,7 +99,7 @@ public class EcommerceSimulator {
             EcommerceJdbcRepository repo = new EcommerceJdbcRepository(conn);
             Random rng = new Random(42);
 
-            seedAllQueries(repo);
+            warmupCapture(raw, repo);
 
             LOG.info("[Simulator] Simulating traffic for " + SIMULATION_SECS + " s...");
             long endMs = System.currentTimeMillis() + (long) SIMULATION_SECS * 1_000;
@@ -265,21 +266,63 @@ public class EcommerceSimulator {
     }
 
     /**
-     * Runs each registered query exactly once before the timed simulation window.
-     * Guarantees all SQL is present in the captured profile regardless of the random
-     * call distribution during the timed phase.
+     * Runs each contracted query exactly once using forced capture, guaranteeing that
+     * every SQL template appears in the load profile even when the probabilistic
+     * simulation window is too short to hit low-frequency queries. Write queries are
+     * executed inside a transaction that is always rolled back to leave no residue.
      */
-    private static void seedAllQueries(EcommerceJdbcRepository repo) {
-        LOG.info("[Simulator] Seeding all queries for guaranteed SQL capture...");
-        try { repo.searchByCategory(CATEGORIES[0]); } catch (SQLException ignored) {}
-        try { repo.getProductDetail(1); }              catch (SQLException ignored) {}
-        try { repo.checkInventory(1); }                catch (SQLException ignored) {}
+    private static void warmupCapture(Connection raw, EcommerceJdbcRepository repo) {
+        int executed = 0;
+
+        // Read-only queries — fail soft: a single failure does not abort the warmup
+        try (CaptureContext ignored = CaptureContext.beginForced("searchProductsByCategory")) {
+            repo.searchByCategory(CATEGORIES[0]);
+            executed++;
+        } catch (Exception e) {
+            LOG.warning("[EcommerceSimulator] Warmup searchProductsByCategory: " + e.getMessage());
+        }
+        try (CaptureContext ignored = CaptureContext.beginForced("getProductDetail")) {
+            repo.getProductDetail(1);
+            executed++;
+        } catch (Exception e) {
+            LOG.warning("[EcommerceSimulator] Warmup getProductDetail: " + e.getMessage());
+        }
+        try (CaptureContext ignored = CaptureContext.beginForced("checkInventory")) {
+            repo.checkInventory(1);
+            executed++;
+        } catch (Exception e) {
+            LOG.warning("[EcommerceSimulator] Warmup checkInventory: " + e.getMessage());
+        }
+        try (CaptureContext ignored = CaptureContext.beginForced("salesDashboard")) {
+            repo.salesDashboard();
+            executed++;
+        } catch (Exception e) {
+            LOG.warning("[EcommerceSimulator] Warmup salesDashboard: " + e.getMessage());
+        }
+
+        // Write queries — always rolled back so the warmup leaves no residue
         try {
-            int orderId = repo.createOrder(1);
-            if (orderId > 0) repo.updateInventory(1, 1);
-        } catch (SQLException ignored) {}
-        try { repo.salesDashboard(); }                 catch (SQLException ignored) {}
-        LOG.info("[Simulator] Seed complete.");
+            raw.setAutoCommit(false);
+            try (CaptureContext ignored = CaptureContext.beginForced("createOrder")) {
+                repo.createOrder(1);
+                executed++;
+            } catch (Exception e) {
+                LOG.warning("[EcommerceSimulator] Warmup createOrder: " + e.getMessage());
+            }
+            try (CaptureContext ignored = CaptureContext.beginForced("updateInventory")) {
+                repo.updateInventory(1, 1);
+                executed++;
+            } catch (Exception e) {
+                LOG.warning("[EcommerceSimulator] Warmup updateInventory: " + e.getMessage());
+            }
+        } catch (SQLException e) {
+            LOG.warning("[EcommerceSimulator] Warmup transaction setup: " + e.getMessage());
+        } finally {
+            try { raw.rollback(); }          catch (SQLException e) { LOG.warning("[EcommerceSimulator] Warmup rollback: " + e.getMessage()); }
+            try { raw.setAutoCommit(true); } catch (SQLException e) { LOG.warning("[EcommerceSimulator] Warmup autocommit: " + e.getMessage()); }
+        }
+
+        LOG.info("[EcommerceSimulator] Warmup capture complete: " + executed + " queries executed.");
     }
 
     private static String env(String key, String def) {
