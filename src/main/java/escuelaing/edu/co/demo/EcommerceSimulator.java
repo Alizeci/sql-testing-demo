@@ -25,6 +25,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
 
 /**
@@ -109,9 +110,11 @@ public class EcommerceSimulator {
                 int    customerId = rng.nextInt(200) + 1;
                 String category   = CATEGORIES[rng.nextInt(CATEGORIES.length)];
 
-                try { repo.searchByCategory(category); }
+                double minPrice = ThreadLocalRandom.current().nextDouble(10.0, 200.0);
+                double maxPrice = minPrice + ThreadLocalRandom.current().nextDouble(50.0, 300.0);
+                try { repo.searchProductsByCategory(category, minPrice, maxPrice); }
                 catch (SQLException e) {
-                    LOG.warning("[Simulator] searchByCategory cancelled (" + e.getMessage() + ")");
+                    LOG.warning("[Simulator] searchProductsByCategory cancelled (" + e.getMessage() + ")");
                 }
 
                 try { repo.getProductDetail(productId); }
@@ -276,7 +279,7 @@ public class EcommerceSimulator {
 
         // Read-only queries — fail soft: a single failure does not abort the warmup
         try (CaptureContext ignored = CaptureContext.beginForced("searchProductsByCategory")) {
-            repo.searchByCategory(CATEGORIES[0]);
+            repo.searchProductsByCategory("electronics", 20.0, 200.0);
             executed++;
         } catch (Exception e) {
             LOG.warning("[EcommerceSimulator] Warmup searchProductsByCategory: " + e.getMessage());

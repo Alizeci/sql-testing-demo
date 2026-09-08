@@ -6,13 +6,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Pure JDBC implementation of the e-commerce queries.
  *
- * <p>No Spring, no ORM — standard {@link PreparedStatement} only.
+ * <p>No Spring, no ORM, no domain objects — standard {@link PreparedStatement} only.
  * Each method opens a {@link CaptureContext} so that {@code JdbcWrapper}
  * associates measured latency with the correct {@code queryId} declared
  * in {@link EcommerceQueryRegistry}.</p>
@@ -30,25 +28,31 @@ public class EcommerceJdbcRepository {
     // -------------------------------------------------------------------------
 
     /**
-     * Returns active products in a category, ordered by rating, paginated.
+     * Searches active, in-stock products by category and price range, ranked by rating.
      *
-     * <p>Backed by {@code idx_products_active_category}. Adding an order-by-popularity
-     * variant via {@code LEFT JOIN order_items GROUP BY} removes index support
-     * and degrades p95 above the 300 ms SLA at production scale.</p>
+     * <p>Backed by {@code idx_products_active_category}. Multi-filter on
+     * category + active + stock + price range — plan change forbidden.</p>
+     *
+     * @return number of rows returned
      */
-    public List<String> searchByCategory(String category) throws SQLException {
+    public int searchProductsByCategory(String category,
+                                        double minPrice,
+                                        double maxPrice) throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("searchProductsByCategory");
              PreparedStatement ps = conn.prepareStatement(
                      "SELECT id, name, price, stock_quantity, rating " +
                      "FROM products " +
-                     "WHERE active = true AND category = ? " +
-                     "ORDER BY rating DESC " +
-                     "LIMIT 20 OFFSET 0")) {
+                     "WHERE category = ? AND active = true AND stock_quantity > 0 " +
+                     "AND price BETWEEN ? AND ? " +
+                     "ORDER BY rating DESC, price ASC " +
+                     "LIMIT 50")) {
             ps.setString(1, category);
+            ps.setDouble(2, minPrice);
+            ps.setDouble(3, maxPrice);
             try (ResultSet rs = ps.executeQuery()) {
-                List<String> names = new ArrayList<>();
-                while (rs.next()) names.add(rs.getString("name"));
-                return names;
+                int count = 0;
+                while (rs.next()) { count++; }
+                return count;
             }
         }
     }
@@ -76,9 +80,11 @@ public class EcommerceJdbcRepository {
     }
 
     /**
-     * Returns sales revenue, order count and average price grouped by product category.
+     * Sales dashboard: revenue, order count and average price by category.
+     *
+     * @return number of category rows returned
      */
-    public List<String> salesDashboard() throws SQLException {
+    public int salesDashboard() throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("salesDashboard");
              PreparedStatement ps = conn.prepareStatement(
                      "SELECT p.category, " +
@@ -92,9 +98,9 @@ public class EcommerceJdbcRepository {
                      "GROUP BY p.category " +
                      "ORDER BY total_revenue DESC")) {
             try (ResultSet rs = ps.executeQuery()) {
-                List<String> categories = new ArrayList<>();
-                while (rs.next()) categories.add(rs.getString("category"));
-                return categories;
+                int count = 0;
+                while (rs.next()) { count++; }
+                return count;
             }
         }
     }

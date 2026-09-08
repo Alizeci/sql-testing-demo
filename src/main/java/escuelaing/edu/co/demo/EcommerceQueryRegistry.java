@@ -25,12 +25,12 @@ public class EcommerceQueryRegistry {
      * (hot spot on popular categories such as "electronics").</p>
      */
     @SqlQuery(queryId = "searchProductsByCategory",
-              description = "Active products by category, ordered by rating, paginated")
+              description = "Search active in-stock products by category with price range filter, ranked by rating")
     @Req(maxResponseTimeMs = 300,
          priority = Req.Priority.HIGH,
          allowPlanChange = false,
-         description = "SLA: 300 ms p95. Plan change forbidden — an unindexed JOIN triggers a hash aggregate over millions of rows")
-    public void searchProductsByCategory(String category, int limit, int offset) {}
+         description = "Backed by idx_products_active_category. Multi-filter search on category + active + stock + price range with rating-based ranking. Exceeding 300 ms degrades the search UX.")
+    public void searchProductsByCategory(String category, double minPrice, double maxPrice) {}
 
     /**
      * Fetches full product details by primary key.
