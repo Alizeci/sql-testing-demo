@@ -1,19 +1,19 @@
 -- =============================================================================
--- Schema de la aplicación demo: E-commerce con simulación de flash sale
+-- Demo application schema: e-commerce with flash-sale simulation
 --
--- Propósito: demostrar el sistema de pruebas de carga continua (Fase 3)
--- sobre un dominio que cualquier equipo de desarrollo reconoce.
+-- Purpose: demonstrate the continuous load-testing system (Phase 3)
+-- over a domain that any development team recognizes.
 --
--- La aplicación demo instrumenta sus repositorios con @SqlQuery + @Req (Fase 1),
--- captura tráfico real con JdbcWrapper (Fase 2), y usa este schema en la BD
--- espejo para detectar regresiones SQL antes de cada merge (Fase 3 + 4).
+-- The demo application instruments its repositories with @SqlQuery + @Req (Phase 1),
+-- captures real traffic with JdbcWrapper (Phase 2), and uses this schema in the mirror
+-- database to detect SQL regressions before each merge (Phase 3 + 4).
 --
--- Escenario de carga: TestProfile "peak" — flash sale con distribución Zipf.
--- Corresponde al challenge "Peak" de BenchPress (Van Aken et al., SIGMOD 2015).
+-- Load scenario: TestProfile "peak" — flash sale with Zipf distribution.
+-- Matches the "Peak" challenge from BenchPress (Van Aken et al., SIGMOD 2015).
 -- =============================================================================
 
 -- -----------------------------------------------------------------------------
--- Catálogo de productos
+-- Product catalog
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS products (
     id             SERIAL PRIMARY KEY,
@@ -26,13 +26,13 @@ CREATE TABLE IF NOT EXISTS products (
     created_at     TIMESTAMP      NOT NULL DEFAULT NOW()
 );
 
--- Índice de búsqueda por categoría — clave para detectar PLAN_CHANGED
--- si alguien lo elimina o lo modifica en un PR
+-- Category search index — key to detecting PLAN_CHANGED
+-- if someone removes or changes it in a PR
 CREATE INDEX IF NOT EXISTS idx_products_category ON products (category);
 CREATE INDEX IF NOT EXISTS idx_products_active_category ON products (active, category);
 
 -- -----------------------------------------------------------------------------
--- Clientes
+-- Customers
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS customers (
     id         SERIAL PRIMARY KEY,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS customers (
 );
 
 -- -----------------------------------------------------------------------------
--- Órdenes
+-- Orders
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS orders (
     id           SERIAL PRIMARY KEY,
@@ -61,7 +61,7 @@ CREATE INDEX IF NOT EXISTS idx_orders_status   ON orders (status);
 CREATE INDEX IF NOT EXISTS idx_orders_created  ON orders (created_at DESC);
 
 -- -----------------------------------------------------------------------------
--- Líneas de orden (items dentro de cada pedido)
+-- Order lines (items inside each order)
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS order_items (
     id          SERIAL PRIMARY KEY,
@@ -75,7 +75,7 @@ CREATE INDEX IF NOT EXISTS idx_order_items_order   ON order_items (order_id);
 CREATE INDEX IF NOT EXISTS idx_order_items_product ON order_items (product_id);
 
 -- -----------------------------------------------------------------------------
--- Log de inventario (trazabilidad de cambios de stock)
+-- Inventory log (stock change traceability)
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS inventory_log (
     id          SERIAL PRIMARY KEY,
