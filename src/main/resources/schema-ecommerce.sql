@@ -29,7 +29,10 @@ CREATE TABLE IF NOT EXISTS products (
 -- Category search index — key to detecting PLAN_CHANGED
 -- if someone removes or changes it in a PR
 CREATE INDEX IF NOT EXISTS idx_products_category ON products (category);
-CREATE INDEX IF NOT EXISTS idx_products_active_category ON products (active, category);
+-- TEST 3 (Scenario A): index commented out to simulate
+-- removal through a schema change in a PR.
+-- CREATE INDEX IF NOT EXISTS idx_products_active_category
+--     ON products (active, category);
 
 -- -----------------------------------------------------------------------------
 -- Customers
