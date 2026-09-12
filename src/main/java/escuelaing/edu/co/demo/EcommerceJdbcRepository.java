@@ -80,7 +80,7 @@ public class EcommerceJdbcRepository {
     }
 
     /**
-     * Sales dashboard: revenue, order count and average price by category.
+     * Sales dashboard: revenue, order count, customer count and average price by category.
      *
      * @return number of category rows returned
      */
@@ -89,11 +89,13 @@ public class EcommerceJdbcRepository {
              PreparedStatement ps = conn.prepareStatement(
                      "SELECT p.category, " +
                      "       COUNT(DISTINCT o.id)             AS total_orders, " +
+                     "       COUNT(DISTINCT c.id)             AS total_customers, " +
                      "       SUM(oi.quantity * oi.unit_price) AS total_revenue, " +
                      "       AVG(oi.unit_price)               AS avg_price " +
                      "FROM products p " +
                      "JOIN order_items oi ON oi.product_id = p.id " +
                      "JOIN orders o       ON o.id = oi.order_id " +
+                     "LEFT JOIN customers c ON c.id = o.customer_id " +
                      "WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') " +
                      "GROUP BY p.category " +
                      "ORDER BY total_revenue DESC")) {
