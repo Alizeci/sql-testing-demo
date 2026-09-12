@@ -93,6 +93,7 @@ public class EcommerceJdbcRepository {
                      "       COUNT(DISTINCT c.tier)            AS distinct_tiers, " +
                      "       SUM(oi.quantity * oi.unit_price)  AS total_revenue, " +
                      "       AVG(oi.unit_price)                AS avg_price, " +
+                     "       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY oi.unit_price) AS median_price, " +
                      "       STDDEV(oi.unit_price)             AS stddev_price, " +
                      "       MIN(oi.unit_price)                AS min_price, " +
                      "       MAX(oi.unit_price)                AS max_price, " +
