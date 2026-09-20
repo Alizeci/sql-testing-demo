@@ -80,7 +80,7 @@ public class EcommerceJdbcRepository {
     }
 
     /**
-     * Sales dashboard: revenue, order count and average price by category.
+     * Sales dashboard: revenue, order count, customer count, price distribution stats and inventory movements (join + outbound sum) by category.
      *
      * @return number of category rows returned
      */
@@ -88,12 +88,29 @@ public class EcommerceJdbcRepository {
         try (CaptureContext ignored = CaptureContext.begin("salesDashboard");
              PreparedStatement ps = conn.prepareStatement(
                      "SELECT p.category, " +
-                     "       COUNT(DISTINCT o.id)             AS total_orders, " +
-                     "       SUM(oi.quantity * oi.unit_price) AS total_revenue, " +
-                     "       AVG(oi.unit_price)               AS avg_price " +
+                     "       COUNT(DISTINCT o.id)              AS total_orders, " +
+                     "       COUNT(DISTINCT c.id)              AS total_customers, " +
+                     "       COUNT(DISTINCT c.tier)            AS distinct_tiers, " +
+                     "       SUM(oi.quantity * oi.unit_price)  AS total_revenue, " +
+                     "       AVG(oi.unit_price)                AS avg_price, " +
+                     "       PERCENTILE_CONT(0.1)  WITHIN GROUP (ORDER BY oi.unit_price) AS p10_price, " +
+                     "       PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY oi.unit_price) AS q1_price, " +
+                     "       PERCENTILE_CONT(0.5)  WITHIN GROUP (ORDER BY oi.unit_price) AS median_price, " +
+                     "       PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY oi.unit_price) AS q3_price, " +
+                     "       PERCENTILE_CONT(0.9)  WITHIN GROUP (ORDER BY oi.unit_price) AS p90_price, " +
+                     "       PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY oi.unit_price) AS p95_price, " +
+                     "       STDDEV(oi.unit_price)             AS stddev_price, " +
+                     "       MIN(oi.unit_price)                AS min_price, " +
+                     "       MAX(oi.unit_price)                AS max_price, " +
+                     "       AVG(p.rating)                     AS avg_rating, " +
+                     "       SUM(oi.quantity)                  AS total_units_sold, " +
+                     "       CORR(oi.unit_price, p.rating)     AS price_rating_corr, " +
+                     "       COUNT(DISTINCT il.id)             AS inventory_movements " +
                      "FROM products p " +
-                     "JOIN order_items oi ON oi.product_id = p.id " +
-                     "JOIN orders o       ON o.id = oi.order_id " +
+                     "JOIN order_items oi     ON oi.product_id = p.id " +
+                     "JOIN orders o           ON o.id = oi.order_id " +
+                     "LEFT JOIN customers c   ON c.id = o.customer_id " +
+                     "LEFT JOIN inventory_log il ON il.product_id = p.id " +
                      "WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') " +
                      "GROUP BY p.category " +
                      "ORDER BY total_revenue DESC")) {
