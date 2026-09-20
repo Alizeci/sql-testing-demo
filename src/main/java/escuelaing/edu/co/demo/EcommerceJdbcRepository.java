@@ -80,7 +80,7 @@ public class EcommerceJdbcRepository {
     }
 
     /**
-     * Sales dashboard: revenue, order count, customer count, inventory movements and average price by category.
+     * Sales dashboard: revenue, order count, customer count, inventory movements (join + outbound sum) and average price by category.
      *
      * @return number of category rows returned
      */
@@ -105,6 +105,8 @@ public class EcommerceJdbcRepository {
                      "       AVG(p.rating)                     AS avg_rating, " +
                      "       SUM(oi.quantity)                  AS total_units_sold, " +
                      "       CORR(oi.unit_price, p.rating)     AS price_rating_corr, " +
+                     "       COUNT(DISTINCT il.id)             AS inventory_movements, " +
+                     "       SUM(CASE WHEN il.delta < 0 THEN -il.delta ELSE 0 END) AS total_out, " +
                      "       (SELECT COUNT(DISTINCT o2.customer_id) " +
                      "          FROM orders o2 " +
                      "          JOIN order_items oi2 ON oi2.order_id = o2.id " +
@@ -116,6 +118,7 @@ public class EcommerceJdbcRepository {
                      "JOIN order_items oi     ON oi.product_id = p.id " +
                      "JOIN orders o           ON o.id = oi.order_id " +
                      "LEFT JOIN customers c   ON c.id = o.customer_id " +
+                     "LEFT JOIN inventory_log il ON il.product_id = p.id " +
                      "WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') " +
                      "GROUP BY p.category " +
                      "ORDER BY total_revenue DESC")) {
