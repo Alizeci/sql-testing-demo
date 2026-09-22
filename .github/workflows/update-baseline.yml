@@ -6,6 +6,10 @@ on:
     paths-ignore:
       - 'baseline.json'
       - 'load-profile.json'
+      - '**/*.md'
+      - 'NOTICE'
+      - 'LICENSE'
+      - '.gitignore'
   schedule:
     - cron: '0 3 * * *'
   workflow_dispatch:
