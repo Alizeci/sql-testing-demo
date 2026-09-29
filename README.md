@@ -22,7 +22,7 @@ otros proyectos Java.
   completo: gate de PR, actualización de baseline, benchmark nocturno
   y captura de perfil productivo.
 - **Artefactos persistidos** en el repositorio (`baseline.json`,
-  `load-profile.json`) para reproducibilidad end-to-end.
+  `load-profile.json`) para reproducibilidad de extremo a extremo.
 
 ## Cómo funciona
 
