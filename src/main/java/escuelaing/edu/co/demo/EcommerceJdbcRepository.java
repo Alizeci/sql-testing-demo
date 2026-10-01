@@ -89,6 +89,7 @@ public class EcommerceJdbcRepository {
              PreparedStatement ps = conn.prepareStatement(
                      "SELECT p.category, " +
                      "       COUNT(DISTINCT o.id)             AS total_orders, " +
+                     "       COUNT(DISTINCT o.customer_id)    AS unique_customers, " +
                      "       SUM(oi.quantity * oi.unit_price) AS total_revenue, " +
                      "       AVG(oi.unit_price)               AS avg_price " +
                      "FROM products p " +
