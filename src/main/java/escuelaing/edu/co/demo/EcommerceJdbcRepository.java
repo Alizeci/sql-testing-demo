@@ -45,7 +45,7 @@ public class EcommerceJdbcRepository {
                      "WHERE category = ? AND active = true AND stock_quantity > 0 " +
                      "AND price BETWEEN ? AND ? " +
                      "ORDER BY rating DESC, price ASC " +
-                     "LIMIT 50")) {
+                     "LIMIT 100")) {
             ps.setString(1, category);
             ps.setDouble(2, minPrice);
             ps.setDouble(3, maxPrice);
