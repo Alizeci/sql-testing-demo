@@ -10,7 +10,7 @@ on:
       - 'LICENSE'
 
 concurrency:
-  group: light-benchmark-${{ github.event.pull_request.number }}
+  group: light-benchmark-${{ github.event.pull_request.number }}-${{ github.sha }}
   cancel-in-progress: false
 
 jobs:
