@@ -79,8 +79,12 @@ public class EcommerceJdbcRepository {
         }
     }
 
-    /**
+/**
      * Sales dashboard: revenue, order count and average price by category.
+     *
+     * <p>Adds per-row MD5 computations in the WHERE clause (always true,
+     * but forces hash evaluation on every scanned order), which increases
+     * per-row work before aggregation without changing the join tree.</p>
      *
      * @return number of category rows returned
      */
@@ -95,6 +99,8 @@ public class EcommerceJdbcRepository {
                      "JOIN order_items oi ON oi.product_id = p.id " +
                      "JOIN orders o       ON o.id = oi.order_id " +
                      "WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') " +
+                     "AND MD5(o.status) IS NOT NULL " +   // always true, forces MD5 per row
+                     "AND LENGTH(MD5(CAST(o.id AS text))) > 0 " +   // always true, forces MD5+CAST per row
                      "GROUP BY p.category " +
                      "ORDER BY total_revenue DESC")) {
             try (ResultSet rs = ps.executeQuery()) {
