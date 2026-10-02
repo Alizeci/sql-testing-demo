@@ -90,6 +90,7 @@ public class EcommerceJdbcRepository {
                      "SELECT p.category, " +
                      "       COUNT(DISTINCT o.id)             AS total_orders, " +
                      "       COUNT(DISTINCT o.customer_id)    AS unique_customers, " +
+                     "       COUNT(DISTINCT oi.product_id)    AS unique_products, " +
                      "       SUM(oi.quantity * oi.unit_price) AS total_revenue, " +
                      "       AVG(oi.unit_price)               AS avg_price " +
                      "FROM products p " +
