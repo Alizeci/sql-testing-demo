@@ -80,39 +80,42 @@ public class EcommerceJdbcRepository {
     }
 
    /**
-     * Sales dashboard: revenue, order count, average price,
-     * median price, p95 price, and quantity–price correlation by category.
+     * Sales dashboard: revenue, order count, average price, and a suite of
+     * statistical aggregations by category.
      *
-     * <p>Adds statistical aggregations (percentiles via
-     * {@code PERCENTILE_CONT} and correlation via {@code CORR}) to the
-     * existing dashboard, which increases per-group work without changing
+     * <p>Includes percentiles, standard deviation, variance, and regression
+     * metrics computed per group. Increases per-group work without changing
      * the join tree.</p>
      *
      * @return number of category rows returned
      */
     public int salesDashboard() throws SQLException {
-    try (CaptureContext ignored = CaptureContext.begin("salesDashboard");
-         PreparedStatement ps = conn.prepareStatement(
-                 "SELECT p.category, " +
-                 "       COUNT(DISTINCT o.id)                                            AS total_orders, " +
-                 "       SUM(oi.quantity * oi.unit_price)                                AS total_revenue, " +
-                 "       AVG(oi.unit_price)                                              AS avg_price, " +
-                 "       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY oi.unit_price)     AS median_price, " +
-                 "       PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY oi.unit_price)    AS p95_price, " +
-                 "       CORR(oi.quantity, oi.unit_price)                                AS qty_price_corr " +
-                 "FROM products p " +
-                 "JOIN order_items oi ON oi.product_id = p.id " +
-                 "JOIN orders o       ON o.id = oi.order_id " +
-                 "WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') " +
-                 "GROUP BY p.category " +
-                 "ORDER BY total_revenue DESC")) {
-        try (ResultSet rs = ps.executeQuery()) {
-            int count = 0;
-            while (rs.next()) { count++; }
-            return count;
+        try (CaptureContext ignored = CaptureContext.begin("salesDashboard");
+             PreparedStatement ps = conn.prepareStatement(
+                     "SELECT p.category, " +
+                     "       COUNT(DISTINCT o.id)                                            AS total_orders, " +
+                     "       SUM(oi.quantity * oi.unit_price)                                AS total_revenue, " +
+                     "       AVG(oi.unit_price)                                              AS avg_price, " +
+                     "       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY oi.unit_price)     AS median_price, " +
+                     "       PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY oi.unit_price)    AS p95_price, " +
+                     "       CORR(oi.quantity, oi.unit_price)                                AS qty_price_corr, " +
+                     "       STDDEV_POP(oi.unit_price)                                       AS price_stddev, " +
+                     "       VAR_POP(oi.quantity * oi.unit_price)                            AS revenue_variance, " +
+                     "       REGR_SLOPE(oi.quantity, oi.unit_price)                          AS regr_slope, " +
+                     "       REGR_R2(oi.quantity, oi.unit_price)                             AS regr_r2 " +
+                     "FROM products p " +
+                     "JOIN order_items oi ON oi.product_id = p.id " +
+                     "JOIN orders o       ON o.id = oi.order_id " +
+                     "WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') " +
+                     "GROUP BY p.category " +
+                     "ORDER BY total_revenue DESC")) {
+            try (ResultSet rs = ps.executeQuery()) {
+                int count = 0;
+                while (rs.next()) { count++; }
+                return count;
+            }
         }
     }
-}
 
     // -------------------------------------------------------------------------
     // Write operations
