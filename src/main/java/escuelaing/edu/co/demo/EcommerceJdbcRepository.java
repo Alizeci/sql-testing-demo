@@ -28,10 +28,13 @@ public class EcommerceJdbcRepository {
     // -------------------------------------------------------------------------
 
     /**
-     * Searches active, in-stock products by category and price range, ranked by rating.
+     * Searches active, in-stock products by category and price range, ranked by
+     * rating, then price, then name.
      *
      * <p>Backed by {@code idx_products_active_category}. Multi-filter on
-     * category + active + stock + price range — plan change forbidden.</p>
+     * category + active + stock + price range — plan change forbidden.
+     * The additional sort key on {@code name} increases per-row comparison
+     * work without altering the join tree.</p>
      *
      * @return number of rows returned
      */
@@ -44,7 +47,7 @@ public class EcommerceJdbcRepository {
                      "FROM products " +
                      "WHERE category = ? AND active = true AND stock_quantity > 0 " +
                      "AND price BETWEEN ? AND ? " +
-                     "ORDER BY rating DESC, price ASC " +
+                     "ORDER BY rating DESC, price ASC, name ASC " +
                      "LIMIT 50")) {
             ps.setString(1, category);
             ps.setDouble(2, minPrice);
