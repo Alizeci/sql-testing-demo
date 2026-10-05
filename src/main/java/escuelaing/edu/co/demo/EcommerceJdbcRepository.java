@@ -79,8 +79,13 @@ public class EcommerceJdbcRepository {
         }
     }
 
-    /**
-     * Sales dashboard: revenue, order count and average price by category.
+   /**
+     * Sales dashboard: revenue, order count, average price, and a suite of
+     * statistical aggregations by category.
+     *
+     * <p>Includes percentiles, standard deviation, variance, and regression
+     * metrics computed per group. Increases per-group work without changing
+     * the join tree.</p>
      *
      * @return number of category rows returned
      */
@@ -88,9 +93,16 @@ public class EcommerceJdbcRepository {
         try (CaptureContext ignored = CaptureContext.begin("salesDashboard");
              PreparedStatement ps = conn.prepareStatement(
                      "SELECT p.category, " +
-                     "       COUNT(DISTINCT o.id)             AS total_orders, " +
-                     "       SUM(oi.quantity * oi.unit_price) AS total_revenue, " +
-                     "       AVG(oi.unit_price)               AS avg_price " +
+                     "       COUNT(DISTINCT o.id)                                            AS total_orders, " +
+                     "       SUM(oi.quantity * oi.unit_price)                                AS total_revenue, " +
+                     "       AVG(oi.unit_price)                                              AS avg_price, " +
+                     "       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY oi.unit_price)     AS median_price, " +
+                     "       PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY oi.unit_price)    AS p95_price, " +
+                     "       CORR(oi.quantity, oi.unit_price)                                AS qty_price_corr, " +
+                     "       STDDEV_POP(oi.unit_price)                                       AS price_stddev, " +
+                     "       VAR_POP(oi.quantity * oi.unit_price)                            AS revenue_variance, " +
+                     "       REGR_SLOPE(oi.quantity, oi.unit_price)                          AS regr_slope, " +
+                     "       REGR_R2(oi.quantity, oi.unit_price)                             AS regr_r2 " +
                      "FROM products p " +
                      "JOIN order_items oi ON oi.product_id = p.id " +
                      "JOIN orders o       ON o.id = oi.order_id " +

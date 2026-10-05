@@ -112,9 +112,9 @@ public class EcommerceQueryRegistry {
      */
     @SqlQuery(queryId = "salesDashboard",
               description = "Sales dashboard: revenue, order count and average price by category")
-    @Req(maxResponseTimeMs = 2500,
-         priority = Req.Priority.MEDIUM,
+    @Req(maxResponseTimeMs = 2200,
+         priority = Req.Priority.HIGH,
          allowPlanChange = false,
-         description = "SLA: 2500 ms p95. Multi-table aggregation — window functions force a full in-memory sort at scale")
+         description = "Business tightened SLA from 2500ms to 2200ms. Adding statistical aggregations brings the query close to the new budget.")
     public void salesDashboard() {}
 }
