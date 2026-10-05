@@ -1,93 +1,39 @@
 {
-  "commitSha" : "ef9ca43c9889d742d8e33369c5786d2b825d954a",
+  "commitSha" : "813a83edebb6a6db38a4cbea0a80f841900f4cc5",
   "profileName" : "ecommerce-demo",
-  "savedAt" : "2026-09-12T01:59:45.733270911Z",
+  "savedAt" : "2026-10-05T02:59:56.440247195Z",
   "queries" : {
     "createOrder" : {
       "queryId" : "createOrder",
-      "sampleCount" : 65,
-      "meanMs" : 4.230769230769231,
-      "medianMs" : 4.0,
-      "p95Ms" : 8.0,
-      "p99Ms" : 15.0,
-      "minMs" : 2,
-      "maxMs" : 15,
-      "callsPerMinute" : 32.5,
-      "planCost" : 0.030000000000000023,
-      "executionPlanText" : "Insert on orders  (cost=0.00..0.03 rows=1 width=118) (actual time=0.123..0.125 rows=1 loops=1)\n  ->  Result  (cost=0.00..0.03 rows=1 width=118) (actual time=0.021..0.021 rows=1 loops=1)\nPlanning Time: 0.053 ms\nTrigger for constraint orders_customer_id_fkey: time=0.064 calls=1\nExecution Time: 0.614 ms\n",
+      "sampleCount" : 15,
+      "meanMs" : 8.333333333333334,
+      "medianMs" : 6.0,
+      "p95Ms" : 30.0,
+      "p99Ms" : 30.0,
+      "minMs" : 4,
+      "maxMs" : 30,
+      "callsPerMinute" : 30.0,
+      "planCost" : 0.030000000000000013,
+      "executionPlanText" : "Insert on orders  (cost=0.00..0.03 rows=1 width=118) (actual time=0.746..0.748 rows=1 loops=1)\n  ->  Result  (cost=0.00..0.03 rows=1 width=118) (actual time=0.023..0.023 rows=1 loops=1)\nPlanning Time: 0.075 ms\nTrigger for constraint orders_customer_id_fkey: time=0.065 calls=1\nExecution Time: 0.852 ms\n",
       "slaComplianceRate" : 100.0,
-      "slaRiskPct" : 4.0,
+      "slaRiskPct" : 15.0,
       "latencyTimeSeries" : [ {
-        "elapsedMs" : 1789178275280,
-        "p50Ms" : 3.0,
-        "p95Ms" : 4.0,
-        "p99Ms" : 4.0,
+        "elapsedMs" : 1791169175773,
+        "p50Ms" : 6.0,
+        "p95Ms" : 30.0,
+        "p99Ms" : 30.0,
         "phaseName" : "measure"
       }, {
-        "elapsedMs" : 1789178285962,
-        "p50Ms" : 4.0,
-        "p95Ms" : 4.0,
-        "p99Ms" : 4.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178296101,
+        "elapsedMs" : 1791169186400,
         "p50Ms" : 5.0,
-        "p95Ms" : 15.0,
-        "p99Ms" : 15.0,
+        "p95Ms" : 13.0,
+        "p99Ms" : 13.0,
         "phaseName" : "measure"
       }, {
-        "elapsedMs" : 1789178306194,
-        "p50Ms" : 4.0,
-        "p95Ms" : 5.0,
-        "p99Ms" : 5.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178317273,
-        "p50Ms" : 3.0,
-        "p95Ms" : 4.0,
-        "p99Ms" : 4.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178327954,
-        "p50Ms" : 5.0,
-        "p95Ms" : 8.0,
-        "p99Ms" : 8.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178338123,
-        "p50Ms" : 4.0,
-        "p95Ms" : 5.0,
-        "p99Ms" : 5.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178348198,
-        "p50Ms" : 4.0,
-        "p95Ms" : 6.0,
-        "p99Ms" : 6.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178359575,
-        "p50Ms" : 4.0,
-        "p95Ms" : 10.0,
-        "p99Ms" : 10.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178370093,
-        "p50Ms" : 4.0,
-        "p95Ms" : 6.0,
-        "p99Ms" : 6.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178380368,
-        "p50Ms" : 4.0,
-        "p95Ms" : 4.0,
-        "p99Ms" : 4.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178385714,
-        "p50Ms" : 4.0,
-        "p95Ms" : 4.0,
-        "p99Ms" : 4.0,
+        "elapsedMs" : 1791169196394,
+        "p50Ms" : 6.0,
+        "p95Ms" : 9.0,
+        "p99Ms" : 9.0,
         "phaseName" : "measure"
       } ],
       "verdict" : "PASS",
@@ -95,89 +41,35 @@
     },
     "searchProductsByCategory" : {
       "queryId" : "searchProductsByCategory",
-      "sampleCount" : 65,
-      "meanMs" : 29.307692307692307,
-      "medianMs" : 26.0,
-      "p95Ms" : 42.0,
-      "p99Ms" : 53.0,
-      "minMs" : 18,
-      "maxMs" : 53,
-      "callsPerMinute" : 32.5,
-      "planCost" : 6628.256153846152,
-      "executionPlanText" : "Limit  (cost=6219.68..6219.68 rows=1 width=34) (actual time=16.579..16.581 rows=0 loops=1)\n  ->  Sort  (cost=6219.68..6219.68 rows=1 width=34) (actual time=16.578..16.579 rows=0 loops=1)\n        Sort Key: rating DESC, price\n        Sort Method: quicksort  Memory: 25kB\n        ->  Bitmap Heap Scan on products  (cost=709.13..6219.67 rows=1 width=34) (actual time=16.572..16.573 rows=0 loops=1)\n              Recheck Cond: ((category)::text = 'home'::text)\n              Filter: (active AND (stock_quantity > 0) AND (price >= '428'::numeric) AND (price <= '109'::numeric))\n              Rows Removed by Filter: 68809\n              Heap Blocks: exact=4142\n              ->  Bitmap Index Scan on idx_products_category  (cost=0.00..709.12 rows=66227 width=0) (actual time=2.849..2.849 rows=68810 loops=1)\n                    Index Cond: ((category)::text = 'home'::text)\nPlanning Time: 0.167 ms\nExecution Time: 16.605 ms\n",
+      "sampleCount" : 15,
+      "meanMs" : 48.13333333333333,
+      "medianMs" : 48.0,
+      "p95Ms" : 56.0,
+      "p99Ms" : 56.0,
+      "minMs" : 42,
+      "maxMs" : 56,
+      "callsPerMinute" : 30.0,
+      "planCost" : 8784.699999999999,
+      "executionPlanText" : "Limit  (cost=8784.69..8784.70 rows=1 width=34) (actual time=29.229..36.856 rows=4 loops=1)\n  ->  Sort  (cost=8784.69..8784.70 rows=1 width=34) (actual time=29.227..36.852 rows=4 loops=1)\n        Sort Key: rating DESC, price\n        Sort Method: quicksort  Memory: 25kB\n        ->  Gather  (cost=1000.00..8784.68 rows=1 width=34) (actual time=0.428..36.832 rows=4 loops=1)\n              Workers Planned: 2\n              Workers Launched: 2\n              ->  Parallel Seq Scan on products  (cost=0.00..7784.58 rows=1 width=34) (actual time=14.872..24.335 rows=1 loops=3)\n                    Filter: (active AND (stock_quantity > 0) AND (price >= '230'::numeric) AND (price <= '451'::numeric) AND ((category)::text = 'electronics'::text))\n                    Rows Removed by Filter: 133382\nPlanning Time: 0.140 ms\nExecution Time: 36.884 ms\n",
       "slaComplianceRate" : 100.0,
-      "slaRiskPct" : 14.000000000000002,
+      "slaRiskPct" : 18.666666666666668,
       "latencyTimeSeries" : [ {
-        "elapsedMs" : 1789178275280,
-        "p50Ms" : 34.0,
-        "p95Ms" : 42.0,
-        "p99Ms" : 42.0,
+        "elapsedMs" : 1791169175773,
+        "p50Ms" : 47.0,
+        "p95Ms" : 56.0,
+        "p99Ms" : 56.0,
         "phaseName" : "measure"
       }, {
-        "elapsedMs" : 1789178285962,
-        "p50Ms" : 27.0,
-        "p95Ms" : 40.0,
-        "p99Ms" : 40.0,
+        "elapsedMs" : 1791169186400,
+        "p50Ms" : 43.0,
+        "p95Ms" : 56.0,
+        "p99Ms" : 56.0,
         "phaseName" : "measure"
       }, {
-        "elapsedMs" : 1789178296101,
-        "p50Ms" : 23.0,
-        "p95Ms" : 40.0,
-        "p99Ms" : 40.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178306194,
-        "p50Ms" : 25.0,
+        "elapsedMs" : 1791169196394,
+        "p50Ms" : 48.0,
         "p95Ms" : 53.0,
         "p99Ms" : 53.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178317273,
-        "p50Ms" : 34.0,
-        "p95Ms" : 36.0,
-        "p99Ms" : 36.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178327954,
-        "p50Ms" : 34.0,
-        "p95Ms" : 42.0,
-        "p99Ms" : 42.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178338123,
-        "p50Ms" : 22.0,
-        "p95Ms" : 48.0,
-        "p99Ms" : 48.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178348198,
-        "p50Ms" : 22.0,
-        "p95Ms" : 41.0,
-        "p99Ms" : 41.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178359575,
-        "p50Ms" : 24.0,
-        "p95Ms" : 38.0,
-        "p99Ms" : 38.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178370093,
-        "p50Ms" : 21.0,
-        "p95Ms" : 36.0,
-        "p99Ms" : 36.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178380368,
-        "p50Ms" : 22.0,
-        "p95Ms" : 37.0,
-        "p99Ms" : 37.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178385714,
-        "p50Ms" : 35.0,
-        "p95Ms" : 39.0,
-        "p99Ms" : 39.0,
         "phaseName" : "measure"
       } ],
       "verdict" : "PASS",
@@ -185,89 +77,35 @@
     },
     "salesDashboard" : {
       "queryId" : "salesDashboard",
-      "sampleCount" : 65,
-      "meanMs" : 796.7076923076924,
-      "medianMs" : 757.0,
-      "p95Ms" : 961.0,
-      "p99Ms" : 1022.0,
-      "minMs" : 670,
-      "maxMs" : 1022,
-      "callsPerMinute" : 32.5,
-      "planCost" : 63012.62307692315,
-      "executionPlanText" : "Sort  (cost=63012.64..63012.66 rows=5 width=79) (actual time=871.707..871.711 rows=5 loops=1)\n  Sort Key: (sum(((oi.quantity)::numeric * oi.unit_price))) DESC\n  Sort Method: quicksort  Memory: 25kB\n  ->  GroupAggregate  (cost=58823.01..63012.58 rows=5 width=79) (actual time=755.990..871.695 rows=5 loops=1)\n        Group Key: p.category\n        ->  Sort  (cost=58823.01..59421.51 rows=239400 width=21) (actual time=729.276..783.859 rows=237708 loops=1)\n              Sort Key: p.category, o.id\n              Sort Method: external merge  Disk: 7960kB\n              ->  Nested Loop  (cost=0.86..32523.24 rows=239400 width=21) (actual time=0.103..420.523 rows=237708 loops=1)\n                    ->  Nested Loop  (cost=0.43..21632.36 rows=239400 width=18) (actual time=0.053..259.017 rows=237708 loops=1)\n                          ->  Seq Scan on order_items oi  (cost=0.00..6752.00 rows=400000 width=18) (actual time=0.007..29.214 rows=400000 loops=1)\n                          ->  Memoize  (cost=0.43..0.50 rows=1 width=4) (actual time=0.000..0.000 rows=1 loops=400000)\n                                Cache Key: oi.order_id\n                                Cache Mode: logical\n                                Hits: 390000  Misses: 10000  Evictions: 0  Overflows: 0  Memory Usage: 874kB\n                                ->  Index Scan using orders_pkey on orders o  (cost=0.42..0.49 rows=1 width=4) (actual time=0.002..0.002 rows=1 loops=10000)\n                                      Index Cond: (id = oi.order_id)\n                                      Filter: ((status)::text = ANY ('{CONFIRMED,SHIPPED,DELIVERED}'::text[]))\n                                      Rows Removed by Filter: 0\n                    ->  Memoize  (cost=0.43..0.50 rows=1 width=11) (actual time=0.000..0.000 rows=1 loops=237708)\n                          Cache Key: oi.product_id\n                          Cache Mode: logical\n                          Hits: 227708  Misses: 10000  Evictions: 0  Overflows: 0  Memory Usage: 1109kB\n                          ->  Index Scan using products_pkey on products p  (cost=0.42..0.49 rows=1 width=11) (actual time=0.002..0.002 rows=1 loops=10000)\n                                Index Cond: (id = oi.product_id)\nPlanning Time: 0.381 ms\nExecution Time: 873.410 ms\n",
+      "sampleCount" : 15,
+      "meanMs" : 801.9333333333333,
+      "medianMs" : 827.0,
+      "p95Ms" : 898.0,
+      "p99Ms" : 898.0,
+      "minMs" : 711,
+      "maxMs" : 898,
+      "callsPerMinute" : 30.0,
+      "planCost" : 64010.0,
+      "executionPlanText" : "Sort  (cost=64009.99..64010.00 rows=1 width=84) (actual time=980.051..980.055 rows=1 loops=1)\n  Sort Key: (sum(((oi.quantity)::numeric * oi.unit_price))) DESC\n  Sort Method: quicksort  Memory: 25kB\n  ->  GroupAggregate  (cost=59802.97..64009.98 rows=1 width=84) (actual time=980.045..980.048 rows=1 loops=1)\n        Group Key: p.category\n        ->  Sort  (cost=59802.97..60403.97 rows=240400 width=26) (actual time=822.755..882.795 rows=240626 loops=1)\n              Sort Key: p.category, o.id\n              Sort Method: external merge  Disk: 8648kB\n              ->  Nested Loop  (cost=0.86..32563.12 rows=240400 width=26) (actual time=0.115..510.966 rows=240626 loops=1)\n                    ->  Nested Loop  (cost=0.43..21624.92 rows=240400 width=18) (actual time=0.067..318.170 rows=240626 loops=1)\n                          ->  Seq Scan on order_items oi  (cost=0.00..6752.00 rows=400000 width=18) (actual time=0.010..39.692 rows=400000 loops=1)\n                          ->  Memoize  (cost=0.43..0.50 rows=1 width=4) (actual time=0.000..0.000 rows=1 loops=400000)\n                                Cache Key: oi.order_id\n                                Cache Mode: logical\n                                Hits: 390000  Misses: 10000  Evictions: 0  Overflows: 0  Memory Usage: 876kB\n                                ->  Index Scan using orders_pkey on orders o  (cost=0.42..0.49 rows=1 width=4) (actual time=0.003..0.003 rows=1 loops=10000)\n                                      Index Cond: (id = oi.order_id)\n                                      Filter: ((status)::text = ANY ('{CONFIRMED,SHIPPED,DELIVERED}'::text[]))\n                                      Rows Removed by Filter: 0\n                    ->  Memoize  (cost=0.43..0.51 rows=1 width=16) (actual time=0.000..0.000 rows=1 loops=240626)\n                          Cache Key: oi.product_id\n                          Cache Mode: logical\n                          Hits: 230626  Misses: 10000  Evictions: 0  Overflows: 0  Memory Usage: 1133kB\n                          ->  Index Scan using products_pkey on products p  (cost=0.42..0.50 rows=1 width=16) (actual time=0.003..0.003 rows=1 loops=10000)\n                                Index Cond: (id = oi.product_id)\nPlanning Time: 0.805 ms\nExecution Time: 982.198 ms\n",
       "slaComplianceRate" : 100.0,
-      "slaRiskPct" : 38.440000000000005,
+      "slaRiskPct" : 35.92,
       "latencyTimeSeries" : [ {
-        "elapsedMs" : 1789178275280,
-        "p50Ms" : 910.0,
-        "p95Ms" : 939.0,
-        "p99Ms" : 939.0,
+        "elapsedMs" : 1791169175773,
+        "p50Ms" : 830.0,
+        "p95Ms" : 855.0,
+        "p99Ms" : 855.0,
         "phaseName" : "measure"
       }, {
-        "elapsedMs" : 1789178285962,
-        "p50Ms" : 951.0,
-        "p95Ms" : 962.0,
-        "p99Ms" : 962.0,
+        "elapsedMs" : 1791169186400,
+        "p50Ms" : 833.0,
+        "p95Ms" : 843.0,
+        "p99Ms" : 843.0,
         "phaseName" : "measure"
       }, {
-        "elapsedMs" : 1789178296101,
-        "p50Ms" : 685.0,
-        "p95Ms" : 725.0,
-        "p99Ms" : 725.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178306194,
-        "p50Ms" : 923.0,
-        "p95Ms" : 961.0,
-        "p99Ms" : 961.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178317273,
-        "p50Ms" : 751.0,
-        "p95Ms" : 1022.0,
-        "p99Ms" : 1022.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178327954,
-        "p50Ms" : 689.0,
-        "p95Ms" : 938.0,
-        "p99Ms" : 938.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178338123,
-        "p50Ms" : 681.0,
-        "p95Ms" : 868.0,
-        "p99Ms" : 868.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178348198,
-        "p50Ms" : 931.0,
-        "p95Ms" : 958.0,
-        "p99Ms" : 958.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178359575,
-        "p50Ms" : 775.0,
-        "p95Ms" : 951.0,
-        "p99Ms" : 951.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178370093,
-        "p50Ms" : 732.0,
-        "p95Ms" : 765.0,
-        "p99Ms" : 765.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178380368,
-        "p50Ms" : 705.0,
-        "p95Ms" : 798.0,
-        "p99Ms" : 798.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178385714,
-        "p50Ms" : 757.0,
-        "p95Ms" : 760.0,
-        "p99Ms" : 760.0,
+        "elapsedMs" : 1791169196394,
+        "p50Ms" : 762.0,
+        "p95Ms" : 898.0,
+        "p99Ms" : 898.0,
         "phaseName" : "measure"
       } ],
       "verdict" : "PASS",
@@ -275,89 +113,35 @@
     },
     "updateInventory" : {
       "queryId" : "updateInventory",
-      "sampleCount" : 65,
-      "meanMs" : 6.092307692307692,
-      "medianMs" : 4.0,
-      "p95Ms" : 14.0,
-      "p99Ms" : 21.0,
-      "minMs" : 2,
-      "maxMs" : 21,
-      "callsPerMinute" : 32.5,
-      "planCost" : 8.449999999999996,
-      "executionPlanText" : "Update on products  (cost=0.42..8.45 rows=0 width=0) (actual time=0.068..0.069 rows=0 loops=1)\n  ->  Index Scan using products_pkey on products  (cost=0.42..8.45 rows=1 width=10) (actual time=0.019..0.020 rows=1 loops=1)\n        Index Cond: (id = 253)\n        Filter: ((stock_quantity + 486) >= 0)\nPlanning Time: 0.068 ms\nExecution Time: 0.089 ms\n",
+      "sampleCount" : 15,
+      "meanMs" : 7.866666666666666,
+      "medianMs" : 5.0,
+      "p95Ms" : 25.0,
+      "p99Ms" : 25.0,
+      "minMs" : 3,
+      "maxMs" : 25,
+      "callsPerMinute" : 30.0,
+      "planCost" : 8.450000000000001,
+      "executionPlanText" : "Update on products  (cost=0.42..8.45 rows=0 width=0) (actual time=0.064..0.064 rows=0 loops=1)\n  ->  Index Scan using products_pkey on products  (cost=0.42..8.45 rows=1 width=10) (actual time=0.017..0.018 rows=1 loops=1)\n        Index Cond: (id = 414)\n        Filter: ((stock_quantity + 163) >= 0)\nPlanning Time: 0.111 ms\nExecution Time: 0.098 ms\n",
       "slaComplianceRate" : 100.0,
-      "slaRiskPct" : 14.000000000000002,
+      "slaRiskPct" : 25.0,
       "latencyTimeSeries" : [ {
-        "elapsedMs" : 1789178275280,
-        "p50Ms" : 3.0,
-        "p95Ms" : 3.0,
-        "p99Ms" : 3.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178285962,
-        "p50Ms" : 3.0,
-        "p95Ms" : 4.0,
-        "p99Ms" : 4.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178296101,
+        "elapsedMs" : 1791169175773,
         "p50Ms" : 8.0,
-        "p95Ms" : 20.0,
-        "p99Ms" : 20.0,
+        "p95Ms" : 25.0,
+        "p99Ms" : 25.0,
         "phaseName" : "measure"
       }, {
-        "elapsedMs" : 1789178306194,
-        "p50Ms" : 4.0,
-        "p95Ms" : 21.0,
-        "p99Ms" : 21.0,
+        "elapsedMs" : 1791169186400,
+        "p50Ms" : 5.0,
+        "p95Ms" : 15.0,
+        "p99Ms" : 15.0,
         "phaseName" : "measure"
       }, {
-        "elapsedMs" : 1789178317273,
-        "p50Ms" : 3.0,
-        "p95Ms" : 12.0,
-        "p99Ms" : 12.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178327954,
-        "p50Ms" : 3.0,
-        "p95Ms" : 9.0,
-        "p99Ms" : 9.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178338123,
-        "p50Ms" : 8.0,
-        "p95Ms" : 12.0,
-        "p99Ms" : 12.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178348198,
-        "p50Ms" : 3.0,
-        "p95Ms" : 11.0,
-        "p99Ms" : 11.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178359575,
-        "p50Ms" : 3.0,
-        "p95Ms" : 10.0,
-        "p99Ms" : 10.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178370093,
-        "p50Ms" : 2.0,
-        "p95Ms" : 11.0,
-        "p99Ms" : 11.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178380368,
-        "p50Ms" : 9.0,
-        "p95Ms" : 14.0,
-        "p99Ms" : 14.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178385714,
-        "p50Ms" : 9.0,
-        "p95Ms" : 10.0,
-        "p99Ms" : 10.0,
+        "elapsedMs" : 1791169196394,
+        "p50Ms" : 5.0,
+        "p95Ms" : 13.0,
+        "p99Ms" : 13.0,
         "phaseName" : "measure"
       } ],
       "verdict" : "PASS",
@@ -365,89 +149,35 @@
     },
     "getProductDetail" : {
       "queryId" : "getProductDetail",
-      "sampleCount" : 65,
-      "meanMs" : 4.384615384615385,
+      "sampleCount" : 15,
+      "meanMs" : 5.4,
       "medianMs" : 3.0,
-      "p95Ms" : 16.0,
-      "p99Ms" : 20.0,
+      "p95Ms" : 18.0,
+      "p99Ms" : 18.0,
       "minMs" : 0,
-      "maxMs" : 20,
-      "callsPerMinute" : 32.5,
-      "planCost" : 8.440000000000001,
-      "executionPlanText" : "Index Scan using products_pkey on products  (cost=0.42..8.44 rows=1 width=42) (actual time=0.017..0.018 rows=1 loops=1)\n  Index Cond: (id = 444)\nPlanning Time: 0.065 ms\nExecution Time: 0.033 ms\n",
+      "maxMs" : 18,
+      "callsPerMinute" : 30.0,
+      "planCost" : 8.44,
+      "executionPlanText" : "Index Scan using products_pkey on products  (cost=0.42..8.44 rows=1 width=47) (actual time=0.017..0.018 rows=1 loops=1)\n  Index Cond: (id = 103)\nPlanning Time: 0.065 ms\nExecution Time: 0.033 ms\n",
       "slaComplianceRate" : 100.0,
-      "slaRiskPct" : 32.0,
+      "slaRiskPct" : 36.0,
       "latencyTimeSeries" : [ {
-        "elapsedMs" : 1789178275280,
-        "p50Ms" : 2.0,
-        "p95Ms" : 2.0,
-        "p99Ms" : 2.0,
+        "elapsedMs" : 1791169175773,
+        "p50Ms" : 6.0,
+        "p95Ms" : 13.0,
+        "p99Ms" : 13.0,
         "phaseName" : "measure"
       }, {
-        "elapsedMs" : 1789178285962,
+        "elapsedMs" : 1791169186400,
         "p50Ms" : 3.0,
-        "p95Ms" : 3.0,
-        "p99Ms" : 3.0,
+        "p95Ms" : 12.0,
+        "p99Ms" : 12.0,
         "phaseName" : "measure"
       }, {
-        "elapsedMs" : 1789178296101,
-        "p50Ms" : 5.0,
-        "p95Ms" : 20.0,
-        "p99Ms" : 20.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178306194,
+        "elapsedMs" : 1791169196394,
         "p50Ms" : 3.0,
-        "p95Ms" : 6.0,
-        "p99Ms" : 6.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178317273,
-        "p50Ms" : 2.0,
-        "p95Ms" : 10.0,
-        "p99Ms" : 10.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178327954,
-        "p50Ms" : 2.0,
-        "p95Ms" : 10.0,
-        "p99Ms" : 10.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178338123,
-        "p50Ms" : 3.0,
-        "p95Ms" : 16.0,
-        "p99Ms" : 16.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178348198,
-        "p50Ms" : 3.0,
-        "p95Ms" : 3.0,
-        "p99Ms" : 3.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178359575,
-        "p50Ms" : 2.0,
-        "p95Ms" : 16.0,
-        "p99Ms" : 16.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178370093,
-        "p50Ms" : 1.0,
         "p95Ms" : 18.0,
         "p99Ms" : 18.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178380368,
-        "p50Ms" : 4.0,
-        "p95Ms" : 15.0,
-        "p99Ms" : 15.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178385714,
-        "p50Ms" : 3.0,
-        "p95Ms" : 3.0,
-        "p99Ms" : 3.0,
         "phaseName" : "measure"
       } ],
       "verdict" : "PASS",
@@ -455,89 +185,35 @@
     },
     "checkInventory" : {
       "queryId" : "checkInventory",
-      "sampleCount" : 65,
-      "meanMs" : 1.6307692307692307,
+      "sampleCount" : 15,
+      "meanMs" : 1.9333333333333333,
       "medianMs" : 1.0,
-      "p95Ms" : 7.0,
-      "p99Ms" : 8.0,
+      "p95Ms" : 10.0,
+      "p99Ms" : 10.0,
       "minMs" : 0,
-      "maxMs" : 8,
-      "callsPerMinute" : 32.5,
-      "planCost" : 8.440000000000001,
-      "executionPlanText" : "Index Scan using products_pkey on products  (cost=0.42..8.44 rows=1 width=4) (actual time=0.715..0.721 rows=1 loops=1)\n  Index Cond: (id = 187)\nPlanning Time: 0.759 ms\nExecution Time: 0.742 ms\n",
+      "maxMs" : 10,
+      "callsPerMinute" : 30.0,
+      "planCost" : 8.44,
+      "executionPlanText" : "Index Scan using products_pkey on products  (cost=0.42..8.44 rows=1 width=4) (actual time=0.016..0.018 rows=1 loops=1)\n  Index Cond: (id = 47)\nPlanning Time: 0.062 ms\nExecution Time: 0.031 ms\n",
       "slaComplianceRate" : 100.0,
-      "slaRiskPct" : 23.333333333333332,
+      "slaRiskPct" : 33.33333333333333,
       "latencyTimeSeries" : [ {
-        "elapsedMs" : 1789178275280,
-        "p50Ms" : 1.0,
-        "p95Ms" : 1.0,
-        "p99Ms" : 1.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178285962,
-        "p50Ms" : 1.0,
-        "p95Ms" : 2.0,
-        "p99Ms" : 2.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178296101,
-        "p50Ms" : 1.0,
-        "p95Ms" : 8.0,
-        "p99Ms" : 8.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178306194,
-        "p50Ms" : 1.0,
-        "p95Ms" : 2.0,
-        "p99Ms" : 2.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178317273,
-        "p50Ms" : 1.0,
-        "p95Ms" : 7.0,
-        "p99Ms" : 7.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178327954,
-        "p50Ms" : 1.0,
-        "p95Ms" : 2.0,
-        "p99Ms" : 2.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178338123,
-        "p50Ms" : 1.0,
-        "p95Ms" : 5.0,
-        "p99Ms" : 5.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178348198,
-        "p50Ms" : 1.0,
-        "p95Ms" : 1.0,
-        "p99Ms" : 1.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178359575,
-        "p50Ms" : 1.0,
-        "p95Ms" : 6.0,
-        "p99Ms" : 6.0,
-        "phaseName" : "measure"
-      }, {
-        "elapsedMs" : 1789178370093,
-        "p50Ms" : 0.0,
+        "elapsedMs" : 1791169175773,
+        "p50Ms" : 2.0,
         "p95Ms" : 3.0,
         "p99Ms" : 3.0,
         "phaseName" : "measure"
       }, {
-        "elapsedMs" : 1789178380368,
+        "elapsedMs" : 1791169186400,
         "p50Ms" : 1.0,
-        "p95Ms" : 7.0,
-        "p99Ms" : 7.0,
+        "p95Ms" : 2.0,
+        "p99Ms" : 2.0,
         "phaseName" : "measure"
       }, {
-        "elapsedMs" : 1789178385714,
+        "elapsedMs" : 1791169196394,
         "p50Ms" : 1.0,
-        "p95Ms" : 4.0,
-        "p99Ms" : 4.0,
+        "p95Ms" : 10.0,
+        "p99Ms" : 10.0,
         "phaseName" : "measure"
       } ],
       "verdict" : "PASS",
