@@ -45,7 +45,6 @@ public class EcommerceJdbcRepository {
                      "WHERE category = ? AND active = true AND stock_quantity > 0 " +
                      "AND price BETWEEN ? AND ? " +
                      "AND MD5(name) IS NOT NULL " +
-                     "AND LENGTH(MD5(MD5(name) || category || price::text)) > 0 " +
                      "ORDER BY rating DESC, price ASC " +
                      "LIMIT 50")) {
             ps.setString(1, category);
