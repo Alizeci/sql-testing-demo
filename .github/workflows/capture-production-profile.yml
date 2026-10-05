@@ -1,22 +1,28 @@
 name: Capture — Production load profile
 
+# The load profile and the PR baseline are versioned as a pair: every completed
+# capture triggers "Baseline — Update post-merge" (workflow_run), so the baseline
+# is always measured against the current load profile.
+#
+# Capture is manual by default. A daily profile adds noise to plan-cost
+# comparisons; a weekly cadence is recommended in steady state (uncomment below).
 on:
-  push:
-    branches: [main]
-  schedule:
-    - cron: '0 2 * * *'
+  # schedule:
+  #   - cron: '0 2 * * 1'   # weekly, Mondays 02:00 UTC
   workflow_dispatch:
     inputs:
       simulation-secs:
-        description: 'Simulation duration in seconds (default: 180)'
+        description: 'Simulation duration in seconds (default: 600)'
         required: false
-        default: '180'
+        default: '600'
 
 jobs:
   call-cpt-capture-profile:
     uses: Alizeci/CPT-SQL/.github/workflows/capture-production-profile.yml@main
     with:
-      simulation-secs: ${{ fromJson(inputs.simulation-secs || '180') }}
+      simulation-secs: ${{ fromJson(inputs.simulation-secs || '600') }}
+      # Declared from domain knowledge (catalogue rules), never from captured data.
+      dp-bounds: 'price:1:600,stock_quantity:0:600,rating:0:5'
     secrets:
       DB_URL: ${{ secrets.DEMO_DB_URL }}
       DB_USER: ${{ secrets.DEMO_DB_USER }}

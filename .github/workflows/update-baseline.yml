@@ -1,20 +1,37 @@
 name: Baseline — Update post-merge
 
+# The PR baseline is regenerated whenever one of its inputs changes:
+#   - approved code changes (merge/push to an integration branch), or
+#   - a new load profile (completion of the capture workflow).
+# No fixed-time schedule: a cron would run independently of the capture and
+# could leave baseline and load profile out of sync.
 on:
   push:
     branches: [main, develop, qa]
     paths-ignore:
       - 'baseline.json'
       - 'load-profile.json'
-  schedule:
-    - cron: '0 3 * * *'
+      - '**/*.md'
+      - 'NOTICE'
+      - 'LICENSE'
+      - '.gitignore'
+  workflow_run:
+    workflows: ['Capture — Production load profile']
+    types: [completed]
   workflow_dispatch:
+
+# Serialise baseline updates so a merge and a capture never write baseline.json concurrently.
+concurrency:
+  group: update-baseline-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   call-cpt-update-baseline:
+    # After a capture, only regenerate when the capture succeeded.
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     uses: Alizeci/CPT-SQL/.github/workflows/update-baseline.yml@main
     with:
       schema-script: src/main/resources/schema-ecommerce.sql
       jar-path: build/libs/sql-testing-demo.jar
       rows-per-table: 400000
-      test-profile: ${{ github.event_name == 'schedule' && 'normal' || 'light' }}
+      test-profile: light
