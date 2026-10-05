@@ -22,7 +22,9 @@ jobs:
     with:
       simulation-secs: ${{ fromJson(inputs.simulation-secs || '600') }}
       # Declared from domain knowledge (catalogue rules), never from captured data.
-      dp-bounds: 'price:1:600,stock_quantity:0:600,rating:0:5'
+      dp-bounds: 'price:1:600,stock_quantity:0:600,rating:0:5,unit_price:1:600,quantity:1:10,total_amount:1:1100'
+      # Low-cardinality business columns, declared explicitly (never inferred from data).
+      dp-categorical: 'products.category,orders.status,customers.tier,inventory_log.reason'
     secrets:
       DB_URL: ${{ secrets.DEMO_DB_URL }}
       DB_USER: ${{ secrets.DEMO_DB_USER }}
