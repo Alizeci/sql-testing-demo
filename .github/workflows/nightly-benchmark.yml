@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '0 7 * * *'   # 2:00 AM COT (UTC-5)
   workflow_dispatch:
+    inputs:
+      rows-per-table:
+        description: 'Mirror rows per table (default 2000000). Use 400000 to isolate the volume effect with the same TestProfile.'
+        required: false
+        default: '2000000'
 
 jobs:
   call-cpt-nightly-benchmark:
@@ -11,4 +16,4 @@ jobs:
     with:
       schema-script: src/main/resources/schema-ecommerce.sql
       jar-path: build/libs/sql-testing-demo.jar
-      rows-per-table: 2000000
+      rows-per-table: ${{ fromJson(inputs.rows-per-table || '2000000') }}
