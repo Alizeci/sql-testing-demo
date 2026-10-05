@@ -8,12 +8,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Pure JDBC implementation of the e-commerce queries.
+ * Pure JDBC implementation of the e-commerce queries used by the demo application.
  *
  * <p>No Spring, no ORM, no domain objects — standard {@link PreparedStatement} only.
  * Each method opens a {@link CaptureContext} so that {@code JdbcWrapper}
  * associates measured latency with the correct {@code queryId} declared
  * in {@link EcommerceQueryRegistry}.</p>
+ *
+ * <p>This class serves as the canonical example of how consumer applications
+ * integrate their SQL queries with the CPT-SQL framework instrumentation.</p>
  */
 public class EcommerceJdbcRepository {
 
