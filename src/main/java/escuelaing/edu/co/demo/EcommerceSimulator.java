@@ -3,14 +3,18 @@ package escuelaing.edu.co.demo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import escuelaing.edu.co.domain.model.DpRelease;
 import escuelaing.edu.co.domain.model.LoadProfile;
 import escuelaing.edu.co.infrastructure.analysis.QueryRegistryLoader;
 import escuelaing.edu.co.infrastructure.capture.CaptureContext;
 import escuelaing.edu.co.infrastructure.capture.CaptureToggle;
+import escuelaing.edu.co.infrastructure.capture.DpConfig;
+import escuelaing.edu.co.infrastructure.capture.FkDegreeProfiler;
 import escuelaing.edu.co.infrastructure.capture.JdbcWrapper;
 import escuelaing.edu.co.infrastructure.capture.LoadProfileBuilder;
 import escuelaing.edu.co.infrastructure.capture.MetricsBuffer;
 import escuelaing.edu.co.infrastructure.capture.SamplingFilter;
+import escuelaing.edu.co.infrastructure.capture.TableProfiler;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -24,6 +28,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
@@ -84,6 +89,8 @@ public class EcommerceSimulator {
         EcommerceSanitizationStrategy sanitization = new EcommerceSanitizationStrategy();
         JdbcWrapper wrapper = new JdbcWrapper(filter, buffer, toggle, sanitization);
 
+        Map<String, DpRelease.ForeignKeyDegree> fkRelease = Map.of();
+        DpRelease tableRelease = null;
         LOG.info("[Simulator] Connecting to " + url);
         try (Connection raw = DriverManager.getConnection(url, user, pass)) {
             applySchema(raw);
@@ -147,10 +154,22 @@ public class EcommerceSimulator {
 
                 Thread.sleep(THINK_TIME_MS);
             }
+
+            // DP release of the foreign-key degree shape (how child rows concentrate on parents).
+            // Runs on the raw connection: it is a statistics query, not application traffic.
+            try (Statement st = raw.createStatement()) {
+                st.execute("SET statement_timeout = 0");
+            }
+            DpConfig dpConfig = DpConfig.fromEnv();
+            tableRelease = TableProfiler.profile(raw, dpConfig);
+            fkRelease = FkDegreeProfiler.profile(raw, dpConfig);
+            LOG.info("[Simulator] Foreign-key degree shapes released: " + fkRelease.keySet());
         }
 
         buffer.stop();
-        LoadProfileBuilder builder = new LoadProfileBuilder(buffer);
+        LoadProfileBuilder builder = new LoadProfileBuilder(buffer)
+                .withTableRelease(tableRelease)
+                .withForeignKeyRelease(fkRelease);
         LoadProfile profile = builder.build();
 
         Path out = Path.of("load-profile.json");
