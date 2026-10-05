@@ -1,0 +1,53 @@
+sql-testing-demo: Reference application for CPT-SQL
+Copyright 2026 Laura Alejandra Izquierdo Castro
+
+This product includes software developed as part of a Master's thesis in
+Informatics at Escuela Colombiana de Ingeniería Julio Garavito (2026),
+under the supervision of Andrés Gómez Casanova.
+
+This project is the reference application for the CPT-SQL framework and
+demonstrates its integration in a real Java e-commerce use case.
+
+Academic reference:
+  Izquierdo Castro, L. A. (2026). Diseño y desarrollo de un sistema de
+  pruebas de carga continua para consultas SQL durante el ciclo de vida
+  del software [Trabajo de grado de maestría]. Escuela Colombiana de
+  Ingeniería Julio Garavito.
+
+--------------------------------------------------------------------------
+Framework consumed
+--------------------------------------------------------------------------
+
+  CPT-SQL: Continuous Performance Testing for SQL Queries (Apache 2.0)
+    https://github.com/Alizeci/CPT-SQL
+    Copyright 2026 Laura Alejandra Izquierdo Castro
+
+--------------------------------------------------------------------------
+Direct third-party dependencies
+--------------------------------------------------------------------------
+
+This product depends directly on:
+
+  Spring Boot (Apache License 2.0)
+    https://spring.io/projects/spring-boot
+    Copyright (c) Broadcom Inc. and its subsidiaries.
+
+  Jackson (Apache License 2.0)
+    https://github.com/FasterXML/jackson
+    Copyright (c) FasterXML, LLC.
+
+  PostgreSQL JDBC Driver (BSD 2-Clause License)
+    https://jdbc.postgresql.org/
+    Copyright (c) 1997, PostgreSQL Global Development Group.
+
+  Project Lombok (MIT License)
+    https://projectlombok.org/
+    Copyright (c) 2009-2024 The Project Lombok Authors.
+
+Test dependencies (not distributed with the runtime artifact):
+
+  JUnit 5 (Eclipse Public License 2.0)
+    https://junit.org/junit5/
+
+  AssertJ (Apache License 2.0)
+    https://assertj.github.io/doc/
