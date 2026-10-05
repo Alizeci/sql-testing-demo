@@ -1,31 +1,31 @@
 {
-  "generatedAt" : "2026-10-05T04:57:04.121714440Z",
-  "totalSamples" : 3586,
+  "generatedAt" : "2026-10-05T14:24:05.419387827Z",
+  "totalSamples" : 4208,
   "queries" : {
     "createOrder" : {
       "queryId" : "createOrder",
-      "sampleCount" : 135,
-      "meanMs" : 7.651851851851852,
-      "medianMs" : 5.0,
-      "p95Ms" : 20.0,
-      "p99Ms" : 32.0,
+      "sampleCount" : 160,
+      "meanMs" : 4.84375,
+      "medianMs" : 4.0,
+      "p95Ms" : 9.0,
+      "p99Ms" : 13.0,
       "minMs" : 2,
-      "maxMs" : 35,
-      "callsPerMinute" : 13.458816022969714,
+      "maxMs" : 53,
+      "callsPerMinute" : 15.867401415504435,
       "capturedSql" : "INSERT INTO orders(customer_id, status, total_amount) VALUES (?, 'PENDING', 0) RETURNING id",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : null
     },
     "searchProductsByCategory" : {
       "queryId" : "searchProductsByCategory",
-      "sampleCount" : 1490,
-      "meanMs" : 127.5993288590604,
-      "medianMs" : 128.0,
-      "p95Ms" : 185.0,
-      "p99Ms" : 210.0,
-      "minMs" : 24,
-      "maxMs" : 311,
-      "callsPerMinute" : 148.54545092018424,
+      "sampleCount" : 1749,
+      "meanMs" : 82.89422527158376,
+      "medianMs" : 81.0,
+      "p95Ms" : 134.0,
+      "p99Ms" : 157.0,
+      "minMs" : 20,
+      "maxMs" : 1013,
+      "callsPerMinute" : 173.45053172323287,
       "capturedSql" : "SELECT id, name, price, stock_quantity, rating FROM products WHERE category = ? AND active = true AND stock_quantity > 0 AND price BETWEEN ? AND ? ORDER BY rating DESC, price ASC LIMIT 50",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : null
@@ -33,100 +33,185 @@
     "salesDashboard" : {
       "queryId" : "salesDashboard",
       "sampleCount" : 24,
-      "meanMs" : 1855.2083333333333,
-      "medianMs" : 1721.0,
-      "p95Ms" : 2652.0,
-      "p99Ms" : 3656.0,
-      "minMs" : 1163,
-      "maxMs" : 3656,
-      "callsPerMinute" : 2.3926784040835045,
+      "meanMs" : 1623.7083333333333,
+      "medianMs" : 1248.0,
+      "p95Ms" : 2527.0,
+      "p99Ms" : 3845.0,
+      "minMs" : 1100,
+      "maxMs" : 3845,
+      "callsPerMinute" : 2.380110212325665,
       "capturedSql" : "SELECT p.category,        COUNT(DISTINCT o.id)             AS total_orders,        SUM(oi.quantity * oi.unit_price) AS total_revenue,        AVG(oi.unit_price)               AS avg_price FROM products p JOIN order_items oi ON oi.product_id = p.id JOIN orders o       ON o.id = oi.order_id WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') GROUP BY p.category ORDER BY total_revenue DESC",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : null
     },
     "updateInventory" : {
       "queryId" : "updateInventory",
-      "sampleCount" : 135,
-      "meanMs" : 5.9037037037037035,
-      "medianMs" : 4.0,
-      "p95Ms" : 16.0,
-      "p99Ms" : 19.0,
+      "sampleCount" : 160,
+      "meanMs" : 3.7125,
+      "medianMs" : 3.0,
+      "p95Ms" : 7.0,
+      "p99Ms" : 9.0,
       "minMs" : 2,
-      "maxMs" : 31,
-      "callsPerMinute" : 13.458816022969714,
+      "maxMs" : 11,
+      "callsPerMinute" : 15.867401415504435,
       "capturedSql" : "UPDATE products SET stock_quantity = stock_quantity + ? WHERE id = ? AND stock_quantity + ? >= 0",
       "avgRowCount" : 1.0,
       "sanitizedRealData" : null
     },
     "getProductDetail" : {
       "queryId" : "getProductDetail",
-      "sampleCount" : 1490,
-      "meanMs" : 2.4503355704697984,
+      "sampleCount" : 1749,
+      "meanMs" : 0.9662664379645511,
       "medianMs" : 1.0,
-      "p95Ms" : 9.0,
-      "p99Ms" : 20.0,
+      "p95Ms" : 3.0,
+      "p99Ms" : 7.0,
       "minMs" : 0,
-      "maxMs" : 39,
-      "callsPerMinute" : 148.54545092018424,
+      "maxMs" : 15,
+      "callsPerMinute" : 173.45053172323287,
       "capturedSql" : "SELECT id, name, category, price, stock_quantity, rating, active FROM products WHERE id = ?",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : null
     },
     "checkInventory" : {
       "queryId" : "checkInventory",
-      "sampleCount" : 312,
-      "meanMs" : 1.8461538461538463,
+      "sampleCount" : 366,
+      "meanMs" : 0.7868852459016393,
       "medianMs" : 1.0,
-      "p95Ms" : 7.0,
-      "p99Ms" : 13.0,
+      "p95Ms" : 2.0,
+      "p99Ms" : 5.0,
       "minMs" : 0,
-      "maxMs" : 23,
-      "callsPerMinute" : 31.10481925308556,
+      "maxMs" : 8,
+      "callsPerMinute" : 36.2966807379664,
       "capturedSql" : "SELECT stock_quantity FROM products WHERE id = ?",
       "avgRowCount" : 0.0,
       "sanitizedRealData" : null
     }
   },
   "dpRelease" : {
-    "mechanism" : "numeric: Gaussian mechanism on clipped mean and second moment (declared bounds); categorical: thresholded Gaussian histogram; identifiers: never released",
+    "mechanism" : "table-level release over the whole capture tables — numeric: Gaussian mechanism on clipped mean and second moment (declared bounds); categorical (declared columns): thresholded Gaussian histogram; identifiers: never released; foreign keys: Gaussian mechanism on cumulative sorted-degree sums at fixed rank fractions (L2 sensitivity sqrt(m)), post-processed to a non-increasing concentration curve",
     "epsilonNumeric" : 0.6,
     "epsilonCategorical" : 0.4,
     "delta" : 1.0E-6,
-    "sourceRows" : 3316,
+    "sourceRows" : 401034,
     "numeric" : {
+      "quantity" : {
+        "lower" : 1.0,
+        "upper" : 10.0,
+        "n" : 400000,
+        "mean" : 2.2562217637941817,
+        "std" : 1.3878437892565758,
+        "sigmaMean" : 0.0026093204760559595,
+        "sigmaSecondMoment" : 0.02870252523661555
+      },
+      "unit_price" : {
+        "lower" : 1.0,
+        "upper" : 600.0,
+        "n" : 400000,
+        "mean" : 254.8972752695277,
+        "std" : 141.47546343085997,
+        "sigmaMean" : 0.17366477390639104,
+        "sigmaSecondMoment" : 104.37252911774104
+      },
+      "total_amount" : {
+        "lower" : 1.0,
+        "upper" : 1100.0,
+        "n" : 401034,
+        "mean" : 671.388560801112,
+        "std" : 233.21551479742322,
+        "sigmaMean" : 0.31780549537063346,
+        "sigmaSecondMoment" : 349.90385040306745
+      },
       "price" : {
         "lower" : 1.0,
         "upper" : 600.0,
-        "n" : 2980,
-        "mean" : 85.33425380631314,
-        "std" : 81.86662908046291,
-        "sigmaMean" : 11.365170543909564,
-        "sigmaSecondMoment" : 6830.467496889648
+        "n" : 400000,
+        "mean" : 104.15925382612926,
+        "std" : 113.39945898460464,
+        "sigmaMean" : 0.17366477390639104,
+        "sigmaSecondMoment" : 104.37252911774104
       },
       "rating" : {
         "lower" : 0.0,
         "upper" : 5.0,
-        "n" : 2980,
-        "mean" : 4.770737921218661,
-        "std" : 0.25,
-        "sigmaMean" : 0.09486786764532189,
-        "sigmaSecondMoment" : 0.47433933822660945
+        "n" : 400000,
+        "mean" : 4.429351359076118,
+        "std" : 0.4141713517399028,
+        "sigmaMean" : 0.001449622486697755,
+        "sigmaSecondMoment" : 0.007248112433488775
       },
       "stock_quantity" : {
         "lower" : 0.0,
         "upper" : 600.0,
-        "n" : 3292,
-        "mean" : 340.78883480656106,
-        "std" : 124.57801494906862,
-        "sigmaMean" : 10.3052094380216,
-        "sigmaSecondMoment" : 6183.12566281296
+        "n" : 400000,
+        "mean" : 336.3850051725894,
+        "std" : 114.79148966949363,
+        "sigmaMean" : 0.17395469840373062,
+        "sigmaSecondMoment" : 104.37281904223836
       }
     },
     "categorical" : {
       "category" : {
-        "electronics" : 1517.0
+        "books" : 60077.0,
+        "clothing" : 100073.0,
+        "electronics" : 160167.0,
+        "home" : 31950.0,
+        "sports" : 48076.0
+      },
+      "status" : {
+        "CANCELLED" : 19998.0,
+        "CONFIRMED" : 120035.0,
+        "DELIVERED" : 120106.0,
+        "PENDING" : 41052.0,
+        "SHIPPED" : 99975.0
+      },
+      "tier" : {
+        "PREMIUM" : 59943.0,
+        "STANDARD" : 319912.0,
+        "VIP" : 19935.0
+      },
+      "reason" : {
+        "ADJUSTMENT" : 39998.0,
+        "RESTOCK" : 199954.0,
+        "RETURN" : 20046.0,
+        "SALE" : 140069.0
       }
     },
-    "suppressedColumns" : [ ]
+    "suppressedColumns" : [ ],
+    "epsilonForeignKey" : 0.4,
+    "deltaForeignKey" : 1.0E-6,
+    "foreignKeys" : {
+      "inventory_log.product_id" : {
+        "childTable" : "inventory_log",
+        "column" : "product_id",
+        "parentTable" : "products",
+        "rankFractions" : [ 1.0E-5, 1.0E-4, 0.001, 0.01, 0.1, 1.0 ],
+        "cumulativeShare" : [ 0.021141314484557684, 0.047072155777035544, 0.10077422404633708, 0.22335317845817276, 0.5348365192882708, 1.0 ],
+        "sigma" : 136.05123360145635
+      },
+      "order_items.order_id" : {
+        "childTable" : "order_items",
+        "column" : "order_id",
+        "parentTable" : "orders",
+        "rankFractions" : [ 9.974216649959853E-6, 9.974216649959854E-5, 9.999152191584753E-4, 0.009999152191584754, 0.09999900257833501, 1.0 ],
+        "cumulativeShare" : [ 1.2699567595690357E-4, 7.32881943081014E-4, 0.006808574788408899, 0.054062173566287904, 0.3538330774781263, 1.0 ],
+        "sigma" : 136.05123360145635
+      },
+      "order_items.product_id" : {
+        "childTable" : "order_items",
+        "column" : "product_id",
+        "parentTable" : "products",
+        "rankFractions" : [ 1.0E-5, 1.0E-4, 0.001, 0.01, 0.1, 1.0 ],
+        "cumulativeShare" : [ 0.021579032178890067, 0.046703591227588985, 0.10042570121543264, 0.22280221485517301, 0.5353253964669874, 1.0 ],
+        "sigma" : 136.05123360145635
+      },
+      "orders.customer_id" : {
+        "childTable" : "orders",
+        "column" : "customer_id",
+        "parentTable" : "customers",
+        "rankFractions" : [ 1.0E-5, 1.0E-4, 0.001, 0.01, 0.1, 1.0 ],
+        "cumulativeShare" : [ 0.0037429184038367245, 0.011412133212456793, 0.03411008253416323, 0.11192063060085547, 0.41448751370018705, 1.0 ],
+        "sigma" : 136.05123360145635
+      }
+    }
   }
 }
