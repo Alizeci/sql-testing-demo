@@ -39,13 +39,14 @@ public class EcommerceJdbcRepository {
                                         double minPrice,
                                         double maxPrice) throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("searchProductsByCategory");
-             PreparedStatement ps = conn.prepareStatement(
-                     "SELECT id, name, price, stock_quantity, rating " +
-                     "FROM products " +
-                     "WHERE category = ? AND active = true AND stock_quantity > 0 " +
-                     "AND price BETWEEN ? AND ? " +
-                     "ORDER BY rating DESC, price ASC " +
-                     "LIMIT 50")) {
+                PreparedStatement ps = conn.prepareStatement("""
+                     SELECT id, name, price, stock_quantity, rating
+                     FROM products
+                     WHERE category = ? AND active = true AND stock_quantity > 0
+                       AND rating >= 4.0
+                       AND price BETWEEN ? AND ?
+                     ORDER BY rating DESC, price ASC
+                     LIMIT 50;""")) {
             ps.setString(1, category);
             ps.setDouble(2, minPrice);
             ps.setDouble(3, maxPrice);
