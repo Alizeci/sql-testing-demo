@@ -86,17 +86,47 @@ public class EcommerceJdbcRepository {
      */
     public int salesDashboard() throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("salesDashboard");
-             PreparedStatement ps = conn.prepareStatement(
-                     "SELECT p.category, " +
-                     "       COUNT(DISTINCT o.id)             AS total_orders, " +
-                     "       SUM(oi.quantity * oi.unit_price) AS total_revenue, " +
-                     "       AVG(oi.unit_price)               AS avg_price " +
-                     "FROM products p " +
-                     "JOIN order_items oi ON oi.product_id = p.id " +
-                     "JOIN orders o       ON o.id = oi.order_id " +
-                     "WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED') " +
-                     "GROUP BY p.category " +
-                     "ORDER BY total_revenue DESC")) {
+                          PreparedStatement ps = conn.prepareStatement("""
+                     WITH filtered_sales AS (
+                         SELECT
+                             p.category,
+                             p.id AS product_id,
+                             p.name AS product_name,
+                             o.id AS order_id,
+                             o.customer_id,
+                             oi.quantity,
+                             oi.unit_price
+                         FROM products p
+                         JOIN order_items oi ON oi.product_id = p.id
+                         JOIN orders o ON o.id = oi.order_id
+                         WHERE o.status IN ('CONFIRMED', 'SHIPPED', 'DELIVERED')
+                     ),
+                     product_units AS (
+                         SELECT
+                             category,
+                             product_id,
+                             product_name,
+                             SUM(quantity) AS units_sold,
+                             ROW_NUMBER() OVER (
+                                 PARTITION BY category
+                                 ORDER BY SUM(quantity) DESC, product_name, product_id
+                             ) AS product_rank
+                         FROM filtered_sales
+                         GROUP BY category, product_id, product_name
+                     )
+                     SELECT
+                         fs.category,
+                         COUNT(DISTINCT fs.order_id) AS total_orders,
+                         SUM(fs.quantity * fs.unit_price) AS total_revenue,
+                         AVG(fs.unit_price) AS avg_price,
+                         COUNT(DISTINCT fs.customer_id) AS distinct_customers,
+                         pu.product_name AS best_selling_product
+                     FROM filtered_sales fs
+                     JOIN product_units pu
+                         ON pu.category = fs.category
+                        AND pu.product_rank = 1
+                     GROUP BY fs.category, pu.product_name
+                     ORDER BY total_revenue DESC;""")) {
             try (ResultSet rs = ps.executeQuery()) {
                 int count = 0;
                 while (rs.next()) { count++; }
