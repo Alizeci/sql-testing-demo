@@ -4,25 +4,23 @@ import escuelaing.edu.co.processor.annotation.Req;
 import escuelaing.edu.co.processor.annotation.SqlQuery;
 
 /**
- * CPT-SQL query registry for the e-commerce demo.
+ * Performance contracts of the e-commerce demo queries.
  *
- * <p>Methods are annotated with {@link SqlQuery} and {@link Req} so that the
- * annotation processor emits {@code queries.json} at compile time (Phase 1).
- * Method bodies are empty — execution happens in {@link EcommerceJdbcRepository},
- * which links each call to its {@code queryId} via {@code CaptureContext}.</p>
+ * <p>Methods are annotated with {@link SqlQuery} and {@link Req} so that the annotation
+ * processor emits {@code queries.json} at compile time. Method bodies are empty: execution
+ * happens in {@link EcommerceJdbcRepository}, which links each call to its {@code queryId}
+ * via {@code CaptureContext}. Traffic shares below refer to {@link EcommerceSimulator}.</p>
  */
 public class EcommerceQueryRegistry {
 
-    // -------------------------------------------------------------------------
-    // Catalog queries (read-heavy — ~80 % of normal traffic)
-    // -------------------------------------------------------------------------
+    // Catalog queries (~80 % of simulated traffic)
 
     /**
      * Returns active products in a category, ordered by rating, paginated.
      *
-     * <p>Highest-frequency query (~60 % of traffic). {@code idx_products_active_category}
-     * is critical: dropping it in a PR causes a seq scan under Zipf load
-     * (hot spot on popular categories such as "electronics").</p>
+     * <p>Highest-frequency query (~40 % of simulated traffic, tied with
+     * {@link #getProductDetail}). {@code idx_products_active_category} is critical:
+     * dropping it in a pull request causes a sequential scan.</p>
      */
     @SqlQuery(queryId = "searchProductsByCategory",
               description = "Search active in-stock products by category with price range filter, ranked by rating")
@@ -35,8 +33,8 @@ public class EcommerceQueryRegistry {
     /**
      * Fetches full product details by primary key.
      *
-     * <p>Second most frequent query (~20 % of traffic). Under Zipf distribution
-     * the top-3 flash-sale products absorb ~80 % of these calls.</p>
+     * <p>~40 % of simulated traffic. Under Zipf access (peak profile) calls concentrate on
+     * a few hot products.</p>
      */
     @SqlQuery(queryId = "getProductDetail",
               description = "Full product details by primary key")
@@ -46,16 +44,13 @@ public class EcommerceQueryRegistry {
          description = "SLA: 50 ms p95. PK lookup — any plan change is a degradation")
     public void getProductDetail(int productId) {}
 
-    // -------------------------------------------------------------------------
-    // Inventory queries (critical read — ~10 % of normal traffic)
-    // -------------------------------------------------------------------------
+    // Inventory queries (critical read, ~8 % of simulated traffic)
 
     /**
      * Returns available stock for a product.
      *
-     * <p>Called before checkout confirmation. During the flash-sale phase
-     * (WRITE_HEAVY), hot-product stock reaches zero and this query contends
-     * with concurrent {@code updateInventory} calls.</p>
+     * <p>Called before checkout confirmation; on hot products it contends with
+     * {@code updateInventory} writes.</p>
      */
     @SqlQuery(queryId = "checkInventory",
               description = "Available stock for a product")
@@ -65,16 +60,14 @@ public class EcommerceQueryRegistry {
          description = "SLA: 30 ms p95. Critical pre-checkout read — plan change forbidden")
     public void checkInventory(int productId) {}
 
-    // -------------------------------------------------------------------------
-    // Order queries (write — ~10 % of normal traffic, up to 60 % at peak)
-    // -------------------------------------------------------------------------
+    // Order queries (writes, ~8 % of simulated traffic; the only queries replayed in
+    // WRITE_HEAVY phases)
 
     /**
-     * Creates a new order with its line items.
+     * Creates a new order header ({@code INSERT ... RETURNING id} on {@code orders}).
      *
-     * <p>Multi-table transaction: INSERT into {@code orders} + N INSERTs into
-     * {@code order_items} + UPDATE on {@code products.stock_quantity}.
-     * Highest contention point under the flash-sale phase (400 TPS, WRITE_HEAVY).</p>
+     * <p>In the simulator a successful order is followed by {@code updateInventory}.
+     * Exercised hardest in the peak profile's flash-sale phase (400 TPS, WRITE_HEAVY).</p>
      */
     @SqlQuery(queryId = "createOrder",
               description = "Creates an order and its line items (multi-table)")
@@ -87,8 +80,8 @@ public class EcommerceQueryRegistry {
     /**
      * Adjusts stock quantity by {@code delta}; no-ops if stock would go negative.
      *
-     * <p>Concurrent write: multiple workers may update the same product simultaneously
-     * during the flash sale — maximum contention point.</p>
+     * <p>Row-level write on hot products: the main contention point under concurrent
+     * checkouts.</p>
      */
     @SqlQuery(queryId = "updateInventory",
               description = "Adjusts product stock by delta (confirmed sale)")
@@ -98,17 +91,15 @@ public class EcommerceQueryRegistry {
          description = "SLA: 100 ms p95. Critical concurrent write — plan change forbidden")
     public void updateInventory(int productId, int delta) {}
 
-    // -------------------------------------------------------------------------
-    // Analytics / Dashboard (low-frequency, high-cost analytical read)
-    // -------------------------------------------------------------------------
+    // Analytics (low-frequency, high-cost read, ~4 % of simulated traffic)
 
     /**
      * Returns sales revenue, order count and average price grouped by category.
      *
-     * <p>Base version uses simple aggregations over three tables with supporting indexes.
-     * Adding window functions ({@code RANK() OVER}, {@code PERCENTILE_CONT}) or extra
-     * joins degrades the plan: the planner must materialise the full result set in memory
-     * before sorting — invisible at small scale, critical in production.</p>
+     * <p>Simple aggregation over three tables with supporting indexes. Adding window
+     * functions ({@code RANK() OVER}, {@code PERCENTILE_CONT}) or extra joins forces the
+     * full result set to be materialised before sorting: invisible at small scale, critical
+     * at production volume.</p>
      */
     @SqlQuery(queryId = "salesDashboard",
               description = "Sales dashboard: revenue, order count and average price by category")

@@ -2,10 +2,9 @@
 -- Seed script: populate ecommerce_demo with 400,000 rows per table
 --              using realistic non-uniform statistical distributions
 --
--- Purpose: align the capture environment (Phase 2 / EcommerceSimulator) with
--- the volume of the PR gate mirror (Phase 3, rowsPerTable=400000), so that
--- Mirror Accuracy validation can evaluate latency equivalence between the
--- capture database and the synthetic mirror under matching volume conditions.
+-- Purpose: populate the capture database with the same volume as the
+-- pull-request mirror (rowsPerTable=400000), so that the fidelity validation
+-- compares capture and mirror latencies at matching volume.
 --
 -- Distributions: statistically REALISTIC to reflect production-like patterns:
 --   - Categories: Zipf-like (electronics 40%, clothing 25%, books 15%,
@@ -21,10 +20,10 @@
 -- PostgreSQL may evaluate subquery-scoped random() only once. Amounts within
 -- each range still use random() directly at row scope.
 --
--- Usage on the VM:
+-- Usage:
 --   psql -U demo -d ecommerce_demo -h localhost -f seed-ecommerce-400k.sql
 --
--- Estimated time: 3-6 minutes depending on VM hardware.
+-- Estimated time: 3-6 minutes, depending on hardware.
 -- =============================================================================
 
 -- Clean existing data

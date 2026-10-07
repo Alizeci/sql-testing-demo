@@ -12,7 +12,7 @@ on:
 
 jobs:
   call-cpt-nightly-benchmark:
-    uses: Alizeci/CPT-SQL/.github/workflows/nightly-benchmark.yml@main
+    uses: Alizeci/CPT-SQL/.github/workflows/nightly-benchmark.yml@v1.0.0
     with:
       schema-script: src/main/resources/schema-ecommerce.sql
       jar-path: build/libs/sql-testing-demo.jar

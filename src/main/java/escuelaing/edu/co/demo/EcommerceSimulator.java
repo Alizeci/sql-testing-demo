@@ -34,14 +34,17 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
 
 /**
- * Simulates e-commerce traffic against the demo database to produce
- * {@code load-profile.json} for phase 3.
+ * Simulates e-commerce traffic against the demo database (the capture environment) and
+ * writes {@code load-profile.json} to the working directory.
  *
- * <p>In a real production application this simulator is not needed — real user
- * traffic flows through {@link JdbcWrapper} automatically. This class exists
- * only because the demo has no real users; it stands in for them by calling
- * the five instrumented queries in proportions that reflect the declared
- * traffic distribution in {@link EcommerceQueryRegistry}.</p>
+ * <p>A real application does not need this: its traffic flows through {@link JdbcWrapper}.
+ * The demo has no users, so this class applies the schema, seeds data if absent, runs
+ * each of the six contracted queries once (forced capture), then loops for
+ * {@code SIMULATION_SECS}: per iteration one category search and one product lookup,
+ * plus with probability 1/5 an inventory check, 1/10 an order with stock update, and
+ * 1/10 a dashboard query, pausing 100 ms between iterations. Finally it computes the
+ * differentially private table release and foreign-key concentration curves over the
+ * whole capture tables.</p>
  *
  * <h3>Usage</h3>
  * <pre>
@@ -53,7 +56,7 @@ import java.util.logging.Logger;
  * DB_URL                   (default: jdbc:postgresql://localhost:5432/ecommerce_demo)
  * DB_USER                  (default: demo)
  * DB_PASSWORD              (default: demo)
- * SIMULATION_SECS          (default: 60)
+ * SIMULATION_SECS          (default: 180)
  * SIMULATOR_STMT_TIMEOUT_MS (default: 8000)
  * </pre>
  */
@@ -155,8 +158,9 @@ public class EcommerceSimulator {
                 Thread.sleep(THINK_TIME_MS);
             }
 
-            // DP release of the foreign-key degree shape (how child rows concentrate on parents).
-            // Runs on the raw connection: it is a statistics query, not application traffic.
+            // Differentially private release over the whole tables (column statistics and
+            // foreign-key concentration curves). Runs on the raw connection so these
+            // statistics queries are not captured as application traffic.
             try (Statement st = raw.createStatement()) {
                 st.execute("SET statement_timeout = 0");
             }
@@ -243,7 +247,7 @@ public class EcommerceSimulator {
             conn.commit();
         }
 
-        // Orders: 20 000 rows skewed toward fulfilled statuses so salesDashboard has data
+        // Orders: 20 000 rows, all in fulfilled statuses so salesDashboard has data
         try (PreparedStatement po = conn.prepareStatement(
                 "INSERT INTO orders(customer_id, status, total_amount) VALUES(?, ?, ?)")) {
             for (int i = 0; i < 20_000; i++) {

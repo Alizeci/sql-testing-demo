@@ -8,12 +8,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Pure JDBC implementation of the e-commerce queries.
+ * Plain JDBC implementation of the e-commerce queries.
  *
- * <p>No Spring, no ORM, no domain objects — standard {@link PreparedStatement} only.
- * Each method opens a {@link CaptureContext} so that {@code JdbcWrapper}
- * associates measured latency with the correct {@code queryId} declared
- * in {@link EcommerceQueryRegistry}.</p>
+ * <p>No Spring or ORM, only {@link PreparedStatement}. Each method opens a
+ * {@link CaptureContext} so that {@code JdbcWrapper} attributes the measured latency to
+ * the {@code queryId} declared in {@link EcommerceQueryRegistry}. Not thread-safe: shares
+ * one {@link Connection}.</p>
  */
 public class EcommerceJdbcRepository {
 
@@ -23,15 +23,12 @@ public class EcommerceJdbcRepository {
         this.conn = conn;
     }
 
-    // -------------------------------------------------------------------------
     // Catalog queries
-    // -------------------------------------------------------------------------
 
     /**
      * Searches active, in-stock products by category and price range, ranked by rating.
      *
-     * <p>Backed by {@code idx_products_active_category}. Multi-filter on
-     * category + active + stock + price range — plan change forbidden.</p>
+     * <p>Backed by {@code idx_products_active_category}; returns at most 50 rows.</p>
      *
      * @return number of rows returned
      */
@@ -105,14 +102,13 @@ public class EcommerceJdbcRepository {
         }
     }
 
-    // -------------------------------------------------------------------------
     // Write operations
-    // -------------------------------------------------------------------------
 
     /**
-     * Creates a new order for the given customer.
+     * Creates a new {@code PENDING} order with zero total for the given customer.
      *
-     * @return the new order ID, or {@code -1} if the insert fails
+     * @return the new order ID, or {@code -1} if no ID was returned
+     * @throws SQLException if the insert fails
      */
     public int createOrder(int customerId) throws SQLException {
         try (CaptureContext ignored = CaptureContext.begin("createOrder");

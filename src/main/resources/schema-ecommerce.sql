@@ -1,15 +1,9 @@
 -- =============================================================================
--- Demo application schema: e-commerce with flash-sale simulation
+-- E-commerce schema of the demo application.
 --
--- Purpose: demonstrate the continuous load-testing system (Phase 3)
--- over a domain that any development team recognizes.
---
--- The demo application instruments its repositories with @SqlQuery + @Req (Phase 1),
--- captures real traffic with JdbcWrapper (Phase 2), and uses this schema in the mirror
--- database to detect SQL regressions before each merge (Phase 3 + 4).
---
--- Load scenario: TestProfile "peak" — flash sale with Zipf distribution.
--- Matches the "Peak" challenge from BenchPress (Van Aken et al., SIGMOD 2015).
+-- Used by the capture database and by the mirror database that CPT-SQL builds
+-- on every pull request. The queries declared in EcommerceQueryRegistry run
+-- against these tables.
 -- =============================================================================
 
 -- -----------------------------------------------------------------------------

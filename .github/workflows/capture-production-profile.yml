@@ -18,7 +18,7 @@ on:
 
 jobs:
   call-cpt-capture-profile:
-    uses: Alizeci/CPT-SQL/.github/workflows/capture-production-profile.yml@main
+    uses: Alizeci/CPT-SQL/.github/workflows/capture-production-profile.yml@v1.0.0
     with:
       simulation-secs: ${{ fromJson(inputs.simulation-secs || '600') }}
       # Declared from domain knowledge (catalogue rules), never from captured data.

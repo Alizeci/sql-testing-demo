@@ -24,10 +24,10 @@ repositories {
 
 dependencies {
     // CPT-SQL framework — published to Maven local via `./gradlew publishToMavenLocal` in CPT-SQL repo
-    compileOnly         'escuelaing.edu.co:sql-testing-annotations:0.0.1-SNAPSHOT'
-    annotationProcessor 'escuelaing.edu.co:sql-testing-annotations:0.0.1-SNAPSHOT'
-    implementation      'escuelaing.edu.co:sql-testing-domain:0.0.1-SNAPSHOT'
-    implementation      'escuelaing.edu.co:sql-testing-infrastructure:0.0.1-SNAPSHOT'
+    compileOnly         'escuelaing.edu.co:sql-testing-annotations:1.0.0'
+    annotationProcessor 'escuelaing.edu.co:sql-testing-annotations:1.0.0'
+    implementation      'escuelaing.edu.co:sql-testing-domain:1.0.0'
+    implementation      'escuelaing.edu.co:sql-testing-infrastructure:1.0.0'
 
     // Spring Boot
     implementation 'org.springframework.boot:spring-boot-starter'
@@ -64,7 +64,7 @@ bootJar {
     archiveFileName = 'sql-testing-demo.jar'
 }
 
-// Runs the traffic simulator (Phase 2)
+// Runs the traffic simulator against the capture database
 tasks.register('runSimulator', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'escuelaing.edu.co.demo.EcommerceSimulator'

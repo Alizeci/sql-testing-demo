@@ -13,9 +13,9 @@ import java.util.Set;
 /**
  * Sanitization strategy for the e-commerce demo schema.
  *
- * <p>Retains non-identifiable business attributes and discards any column
- * that could identify a natural person, in compliance with Country's
- * Law and GDPR principles.</p>
+ * <p>Keeps only whitelisted, non-identifying business attributes (column names are
+ * lower-cased) and drops every other column, so no value that could identify a person
+ * reaches the differentially private release (data-minimisation principle, e.g. GDPR).</p>
  *
  * <h3>Allowed columns</h3>
  * {@code price}, {@code category}, {@code quantity}, {@code stock_quantity},

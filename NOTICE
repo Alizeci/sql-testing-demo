@@ -1,7 +1,7 @@
 sql-testing-demo: Reference application for CPT-SQL
-Copyright 2026 Laura Alejandra Izquierdo Castro
+Copyright 2026 Laura Alejandra Izquierdo Castro and Escuela Colombiana de Ingeniería Julio Garavito
 
-This product includes software developed as part of a Master's thesis in
+This product includes software developed as part of a Master's degree final project in
 Informatics at Escuela Colombiana de Ingeniería Julio Garavito (2026),
 under the supervision of Andrés Gómez Casanova.
 
@@ -11,7 +11,7 @@ demonstrates its integration in a real Java e-commerce use case.
 Academic reference:
   Izquierdo Castro, L. A. (2026). Diseño y desarrollo de un sistema de
   pruebas de carga continua para consultas SQL durante el ciclo de vida
-  del software [Trabajo de grado de maestría]. Escuela Colombiana de
+  del software [Master's degree final project]. Escuela Colombiana de
   Ingeniería Julio Garavito.
 
 --------------------------------------------------------------------------
@@ -20,7 +20,7 @@ Framework consumed
 
   CPT-SQL: Continuous Performance Testing for SQL Queries (Apache 2.0)
     https://github.com/Alizeci/CPT-SQL
-    Copyright 2026 Laura Alejandra Izquierdo Castro
+    Copyright 2026 Laura Alejandra Izquierdo Castro and Escuela Colombiana de Ingeniería Julio Garavito
 
 --------------------------------------------------------------------------
 Direct third-party dependencies

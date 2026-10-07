@@ -29,7 +29,7 @@ jobs:
   call-cpt-update-baseline:
     # After a capture, only regenerate when the capture succeeded.
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
-    uses: Alizeci/CPT-SQL/.github/workflows/update-baseline.yml@main
+    uses: Alizeci/CPT-SQL/.github/workflows/update-baseline.yml@v1.0.0
     with:
       schema-script: src/main/resources/schema-ecommerce.sql
       jar-path: build/libs/sql-testing-demo.jar
