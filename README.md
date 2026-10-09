@@ -1,9 +1,9 @@
 # sql-testing-demo
 
-Case study for [CPT-SQL](https://github.com/Alizeci/CPT-SQL): an e-commerce application in Java (plain JDBC, PostgreSQL 17) with six annotated queries and the four CPT-SQL workflows wired into GitHub Actions. It is the application evaluated in the master's final project and in a companion article in preparation.
+Case study for [CPT-SQL](https://github.com/Alizeci/CPT-SQL): an e-commerce application in Java (plain JDBC, PostgreSQL) with six annotated queries and the four CPT-SQL workflows wired into GitHub Actions. It is the application evaluated in the master's final project and in a companion article in preparation.
 
 - To **adopt CPT-SQL** in your own project, use this repository as a template (sections below).
-- To **check or replicate the evaluation**, go to [`evidence/`](evidence/README.md): scenario branches, pull requests, run IDs, logs and the prompts of the AI test.
+- To **check or replicate the evaluation**, go to [`evidence/`](evidence/README.md): scenario branches, pull requests, run IDs, logs and the prompts of the AI test. The replication package, with the capture database backup, is attached to the [`tg-runs-2026-10` release](https://github.com/Alizeci/sql-testing-demo/releases/tag/tg-runs-2026-10).
 
 ## Queries and contracts
 
@@ -31,7 +31,7 @@ The contracts are declared with `@SqlQuery` and `@Req` in `EcommerceQueryRegistr
 
 - Java 17 and Docker
 - CPT-SQL published to the local Maven repository (`./gradlew publishToMavenLocal` in CPT-SQL, tag `v1.0.0`)
-- A PostgreSQL 17 database that plays the role of production, created with `src/main/resources/schema-ecommerce.sql` and populated with `src/main/resources/seed-ecommerce-400k.sql` (400,000 rows per table, with sales concentrated in a few products)
+- A PostgreSQL database that plays the role of production (the reported runs used PostgreSQL 16.15), created with `src/main/resources/schema-ecommerce.sql` and populated with `src/main/resources/seed-ecommerce-400k.sql` (400,000 rows per table, with sales concentrated in a few products)
 - For CI: a self-hosted GitHub Actions runner with Docker, Java 17 and CPT-SQL in its local Maven repository, and the repository secrets `DEMO_DB_URL`, `DEMO_DB_USER` and `DEMO_DB_PASSWORD` pointing to the capture database
 
 ## Run locally
@@ -79,7 +79,7 @@ Each workflow calls the reusable workflow of the same name in CPT-SQL, pinned to
 | Tag | Meaning |
 |---|---|
 | `tg-runs-2026-10` | `main` as used by every evaluation run. All scenario and AI branches start from this commit |
-| `v1.0.0` | First release, with the `evidence/` folder and workflows pinned to CPT-SQL `v1.0.0` |
+| `v1.0.0` | First release, with dependencies and workflows pinned to CPT-SQL `v1.0.0`. The `evidence/` folder was added to `main` afterwards |
 
 ## Citation
 
