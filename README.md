@@ -3,7 +3,7 @@
 Case study for [CPT-SQL](https://github.com/Alizeci/CPT-SQL): an e-commerce application in Java (plain JDBC, PostgreSQL 17) with six annotated queries and the four CPT-SQL workflows wired into GitHub Actions. It is the application evaluated in the master's final project and in a companion article in preparation.
 
 - To **adopt CPT-SQL** in your own project, use this repository as a template (sections below).
-- To **check or replicate the evaluation**, go to [`evaluation/`](evaluation/README.md): scenario branches, pull requests, run IDs, logs and the prompts of the AI test.
+- To **check or replicate the evaluation**, go to [`evidence/`](evidence/README.md): scenario branches, pull requests, run IDs, logs and the prompts of the AI test.
 
 ## Queries and contracts
 
@@ -70,7 +70,7 @@ Each workflow calls the reusable workflow of the same name in CPT-SQL, pinned to
     │   ├── schema-ecommerce.sql                 # DDL used by the capture database and the mirror
     │   └── seed-ecommerce-400k.sql              # Seed of the capture database
     ├── .github/workflows/                       # The four CI workflows
-    ├── evaluation/                              # Evidence of the evaluation (see its README)
+    ├── evidence/                                # Evidence of the evaluation (see its README)
     ├── baseline.json                            # Approved baseline
     └── load-profile.json                        # Protected statistics from the last capture
 
@@ -79,7 +79,7 @@ Each workflow calls the reusable workflow of the same name in CPT-SQL, pinned to
 | Tag | Meaning |
 |---|---|
 | `tg-runs-2026-10` | `main` as used by every evaluation run. All scenario and AI branches start from this commit |
-| `v1.0.0` | First release, with the `evaluation/` folder and workflows pinned to CPT-SQL `v1.0.0` |
+| `v1.0.0` | First release, with the `evidence/` folder and workflows pinned to CPT-SQL `v1.0.0` |
 
 ## Citation
 

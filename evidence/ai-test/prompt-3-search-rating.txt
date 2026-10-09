@@ -1,0 +1,23 @@
+You are helping on a Java application that uses plain JDBC with PostgreSQL 17.
+Schema:
+  products(id SERIAL PK, name VARCHAR(120), category VARCHAR(60), price NUMERIC(10,2),
+           stock_quantity INT, rating NUMERIC(3,2), active BOOLEAN, created_at TIMESTAMP)
+    indexes: (category), (active, category)
+  customers(id SERIAL PK, name, email UNIQUE, tier, created_at)
+  orders(id SERIAL PK, customer_id INT FK customers, status VARCHAR(30), total_amount NUMERIC(12,2), created_at, updated_at)
+    indexes: (customer_id), (status), (created_at DESC)
+  order_items(id SERIAL PK, order_id INT FK orders, product_id INT FK products, quantity INT, unit_price NUMERIC(10,2))
+    indexes: (order_id), (product_id)
+  inventory_log(id SERIAL PK, product_id INT FK products, delta INT, reason VARCHAR(60), created_at TIMESTAMP)
+    indexes: (product_id, created_at DESC)
+
+Current query (method searchProductsByCategory):
+SELECT id, name, price, stock_quantity, rating
+FROM products
+WHERE category = ? AND active = true AND stock_quantity > 0
+AND price BETWEEN ? AND ?
+ORDER BY rating DESC, price ASC
+LIMIT 50
+
+Feature request: only show products with a rating of at least 4.0.
+Keep the same three parameters in the same order. Return only the new SQL statement.

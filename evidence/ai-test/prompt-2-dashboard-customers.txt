@@ -1,0 +1,28 @@
+You are helping on a Java application that uses plain JDBC with PostgreSQL 17.
+Schema:
+  products(id SERIAL PK, name VARCHAR(120), category VARCHAR(60), price NUMERIC(10,2),
+           stock_quantity INT, rating NUMERIC(3,2), active BOOLEAN, created_at TIMESTAMP)
+    indexes: (category), (active, category)
+  customers(id SERIAL PK, name, email UNIQUE, tier, created_at)
+  orders(id SERIAL PK, customer_id INT FK customers, status VARCHAR(30), total_amount NUMERIC(12,2), created_at, updated_at)
+    indexes: (customer_id), (status), (created_at DESC)
+  order_items(id SERIAL PK, order_id INT FK orders, product_id INT FK products, quantity INT, unit_price NUMERIC(10,2))
+    indexes: (order_id), (product_id)
+  inventory_log(id SERIAL PK, product_id INT FK products, delta INT, reason VARCHAR(60), created_at TIMESTAMP)
+    indexes: (product_id, created_at DESC)
+
+Current query (method salesDashboard):
+SELECT p.category,
+       COUNT(DISTINCT o.id) AS total_orders,
+       SUM(oi.quantity * oi.unit_price) AS total_revenue,
+       AVG(oi.unit_price) AS avg_price
+FROM products p
+JOIN order_items oi ON oi.product_id = p.id
+JOIN orders o ON o.id = oi.order_id
+WHERE o.status IN ('CONFIRMED','SHIPPED','DELIVERED')
+GROUP BY p.category
+ORDER BY total_revenue DESC
+
+Feature request: for each category, also show the number of distinct customers who bought in it
+and the name of its best-selling product by units sold. Keep the same filter on status.
+The query has no parameters; keep it that way. Return only the new SQL statement.
